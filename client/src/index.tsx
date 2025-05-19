@@ -1,6 +1,10 @@
-/**
- * Entry point for the RoomieMatch client application
- * Renders the <App /> component into the DOM
- * Main file that gets executed when the application starts
- */
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
