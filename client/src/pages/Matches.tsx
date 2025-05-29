@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
-// Mock data for potential matches
+// Mock data for potential matches. this would be the user's matches' full data from MongoDB 
 const mockMatches = [
   {
     id: 1,
@@ -18,6 +19,11 @@ const mockMatches = [
       noiseLevel: 'Quiet',
     },
     interests: ['Fashion', 'Baking', 'Crafts'],
+    contact: {
+      email: 'hello.kitty@sanrio.com',
+      phone: '(555) 123-4567',
+      instagram: '@hellokitty_official'
+    }
   },
   {
     id: 2,
@@ -34,6 +40,11 @@ const mockMatches = [
       noiseLevel: 'Moderate',
     },
     interests: ['Baking', 'Cooking', 'Gardening'],
+    contact: {
+      email: 'my.melody@sanrio.com',
+      phone: '(555) 234-5678',
+      instagram: '@mymelody_official'
+    }
   },
   {
     id: 3,
@@ -50,6 +61,11 @@ const mockMatches = [
       noiseLevel: 'Quiet',
     },
     interests: ['Coffee', 'Interior Design', 'Photography'],
+    contact: {
+      email: 'cinnamoroll@sanrio.com',
+      phone: '(555) 345-6789',
+      instagram: '@cinnamoroll_official'
+    }
   },
   {
     id: 4,
@@ -66,6 +82,11 @@ const mockMatches = [
       noiseLevel: 'Moderate',
     },
     interests: ['Nature', 'Sports', 'Science'],
+    contact: {
+      email: 'keroppi@sanrio.com',
+      phone: '(555) 456-7890',
+      instagram: '@keroppi_official'
+    }
   },
   {
     id: 5,
@@ -82,25 +103,34 @@ const mockMatches = [
       noiseLevel: 'Moderate',
     },
     interests: ['Cooking', 'Food', 'Travel'],
+    contact: {
+      email: 'pompompurin@sanrio.com',
+      phone: '(555) 567-8901',
+      instagram: '@pompompurin_official'
+    }
   }
 ];
 
 const Matches = () => {
+  const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState<typeof mockMatches[0] | null>(null);
+  const [showContact, setShowContact] = useState(false);
+
+  const handleEditProfile = () => {
+    navigate('/profile');
+  };
+
+  const handleMessage = () => {
+    setShowContact(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-blue-400">RoomieMatch</Link>
-          <div className="space-x-4">
-            <Link to="/profile" className="text-gray-300 hover:text-white transition-colors">Profile</Link>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">Logout</button>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar 
+        isAuthenticated={true} 
+        onEditProfile={handleEditProfile}
+      />
+      
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -221,16 +251,55 @@ const Matches = () => {
                 </div>
               </div>
 
+              {/* Contact Information Section */}
+              {showContact ? (
+                <div className="bg-gray-700/50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold text-blue-400 mb-4">Contact Information</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-gray-400 text-sm mb-1">Email</p>
+                      <p className="font-medium">{selectedMatch.contact.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm mb-1">Phone</p>
+                      <p className="font-medium">{selectedMatch.contact.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm mb-1">Instagram</p>
+                      <p className="font-medium">{selectedMatch.contact.instagram}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="flex justify-end space-x-4 pt-6">
                 <button
-                  onClick={() => setSelectedMatch(null)}
+                  onClick={() => {
+                    setSelectedMatch(null);
+                    setShowContact(false);
+                  }}
                   className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
                 >
                   Skip
                 </button>
-                <button className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors">
-                  Message
-                </button>
+                {!showContact ? (
+                  <button 
+                    onClick={handleMessage}
+                    className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                  >
+                    Get Contact Info
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      setSelectedMatch(null);
+                      setShowContact(false);
+                    }}
+                    className="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-colors"
+                  >
+                    Close
+                  </button>
+                )}
               </div>
             </div>
           </div>

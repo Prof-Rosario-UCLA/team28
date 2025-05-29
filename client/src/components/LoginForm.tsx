@@ -1,3 +1,5 @@
+// LoginForm.tsx: when user clicks login in landing page, this form is shown
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 

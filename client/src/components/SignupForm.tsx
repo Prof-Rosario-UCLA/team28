@@ -1,3 +1,5 @@
+// SignupForm.tsx: when user clicks signup in landing page, this form is shown
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 

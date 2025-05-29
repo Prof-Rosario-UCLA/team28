@@ -1,3 +1,6 @@
+// OnboardingForm.tsx: when user clicks signup in landing page, this form is shown
+// has 5 pages: basic info, living preferences, lifestyle, schedule & habits, and about you
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -5,10 +8,43 @@ interface OnboardingFormProps {
   onComplete: () => void;
 }
 
+interface OnboardingData {
+  // Basic Info
+  age: string;
+  occupation: string;
+  location: string;
+  moveInDate: string;
+  
+  // Living Preferences
+  budget: string;
+  preferredLocation: string;
+  roomType: string; // private, shared, or flexible
+  leaseLength: string;
+  
+  // Lifestyle
+  smoking: string; // yes, no, or sometimes
+  pets: string; // yes, no, or flexible
+  cleanliness: string; // very clean, moderate, or relaxed
+  noiseLevel: string; // quiet, moderate, or social
+  
+  // Schedule
+  workSchedule: string; // 9-5, night shift, or flexible
+  guests: string; // rarely, sometimes, or often
+  
+  // Additional Info
+  bio: string;
+  interests: string[];
+  contact: {
+    email: string;
+    phone: string;
+    instagram: string;
+  };
+}
+
 const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<OnboardingData>({
     // Basic Info
     age: '',
     occupation: '',
@@ -33,7 +69,12 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
     
     // Additional Info
     bio: '',
-    interests: [] as string[],
+    interests: [],
+    contact: {
+      email: '',
+      phone: '',
+      instagram: ''
+    }
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -396,6 +437,63 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {renderStep()}
+
+          {/* Contact Information Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-blue-400">Contact Information</h3>
+            <div>
+              <label htmlFor="contact.email" className="block text-sm font-medium text-gray-300 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                id="contact.email"
+                name="contact.email"
+                value={formData.contact.email}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact: { ...prev.contact, email: e.target.value }
+                }))}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="contact.phone" className="block text-sm font-medium text-gray-300 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="contact.phone"
+                name="contact.phone"
+                value={formData.contact.phone}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact: { ...prev.contact, phone: e.target.value }
+                }))}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="contact.instagram" className="block text-sm font-medium text-gray-300 mb-2">
+                Instagram Handle
+              </label>
+              <input
+                type="text"
+                id="contact.instagram"
+                name="contact.instagram"
+                value={formData.contact.instagram}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact: { ...prev.contact, instagram: e.target.value }
+                }))}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                placeholder="@username"
+                required
+              />
+            </div>
+          </div>
 
           <div className="flex justify-between pt-6">
             {step > 1 && (

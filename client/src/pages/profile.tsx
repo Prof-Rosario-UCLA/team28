@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 interface ProfileData {
   age: string;
@@ -20,6 +21,11 @@ interface ProfileData {
   interests: string[];
   fullName: string;
   createdAt: string;
+  contact: {
+    email: string;
+    phone: string;
+    instagram: string;
+  };
 }
 
 const Profile = () => {
@@ -34,9 +40,17 @@ const Profile = () => {
     const storedData = localStorage.getItem('userData');
     if (storedData) {
       const data = JSON.parse(storedData);
+      const profileWithContact = {
+        ...data.profile,
+        contact: data.profile.contact || {
+          email: '',
+          phone: '',
+          instagram: ''
+        }
+      };
       setUserData(data);
-      setProfileData(data.profile);
-      setEditedData(data.profile);
+      setProfileData(profileWithContact);
+      setEditedData(profileWithContact);
     }
   }, []);
 
@@ -100,30 +114,12 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-blue-400">RoomieMatch</Link>
-          <div className="space-x-4">
-            <Link to="/matches" className="text-gray-300 hover:text-white transition-colors">Matches</Link>
-            {!isEditing && (
-              <button 
-                onClick={handleEdit}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                Edit Profile
-              </button>
-            )}
-            <button 
-              onClick={handleLogout}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar 
+        isAuthenticated={true} 
+        onEditProfile={handleEdit}
+        isEditing={isEditing}
+      />
+      
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Profile Header */}
@@ -271,6 +267,75 @@ const Profile = () => {
                       <div>
                         <p className="text-gray-400 text-sm">Lease Length</p>
                         <p className="text-white">{profileData.leaseLength}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div className="bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700">
+                <h2 className="text-xl font-semibold text-blue-400 mb-4">Contact Information</h2>
+                <div className="space-y-4">
+                  {isEditing ? (
+                    <>
+                      <div>
+                        <label htmlFor="contact.email" className={commonLabelClasses}>Email</label>
+                        <input
+                          type="email"
+                          id="contact.email"
+                          name="contact.email"
+                          value={editedData.contact.email}
+                          onChange={(e) => setEditedData(prev => prev ? {
+                            ...prev,
+                            contact: { ...prev.contact, email: e.target.value }
+                          } : null)}
+                          className={commonInputClasses}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="contact.phone" className={commonLabelClasses}>Phone Number</label>
+                        <input
+                          type="tel"
+                          id="contact.phone"
+                          name="contact.phone"
+                          value={editedData.contact.phone}
+                          onChange={(e) => setEditedData(prev => prev ? {
+                            ...prev,
+                            contact: { ...prev.contact, phone: e.target.value }
+                          } : null)}
+                          className={commonInputClasses}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="contact.instagram" className={commonLabelClasses}>Instagram Handle</label>
+                        <input
+                          type="text"
+                          id="contact.instagram"
+                          name="contact.instagram"
+                          value={editedData.contact.instagram}
+                          onChange={(e) => setEditedData(prev => prev ? {
+                            ...prev,
+                            contact: { ...prev.contact, instagram: e.target.value }
+                          } : null)}
+                          className={commonInputClasses}
+                          placeholder="@username"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <p className="text-gray-400 text-sm">Email</p>
+                        <p className="text-white">{profileData.contact.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">Phone</p>
+                        <p className="text-white">{profileData.contact.phone}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">Instagram</p>
+                        <p className="text-white">{profileData.contact.instagram}</p>
                       </div>
                     </>
                   )}

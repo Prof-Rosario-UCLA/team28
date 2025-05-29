@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
 import OnboardingForm from '../components/OnboardingForm';
+import Navbar from '../components/Navbar';
 
 const Landing = () => {
   const navigate = useNavigate();
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
 
   // Check if user is authenticated and has completed their profile
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const userData = localStorage.getItem('userData');
     
     if (isAuthenticated && userData) {
@@ -30,26 +33,7 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-400">RoomieMatch</h1>
-          <div className="space-x-4">
-            <button 
-              onClick={() => setShowLoginForm(true)}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Login
-            </button>
-            <button 
-              onClick={() => setShowSignupForm(true)}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar isAuthenticated={isAuthenticated} />
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-20">
