@@ -6,11 +6,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 interface NavbarProps {
   isAuthenticated: boolean;
   onLogout?: () => void;
-  onEditProfile?: () => void;
-  isEditing?: boolean;
 }
 
-const Navbar = ({ isAuthenticated, onLogout, onEditProfile, isEditing }: NavbarProps) => {
+const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,16 +29,9 @@ const Navbar = ({ isAuthenticated, onLogout, onEditProfile, isEditing }: NavbarP
         <div className="space-x-4">
           {isAuthenticated ? (
             <>
-              <Link to="/matches" className="text-gray-300 hover:text-white transition-colors">Matches</Link>
+              <Link to="/potential-matches" className="text-gray-300 hover:text-white transition-colors">Find Matches</Link>
+              <Link to="/matches" className="text-gray-300 hover:text-white transition-colors">My Matches</Link>
               <Link to="/profile" className="text-gray-300 hover:text-white transition-colors">Profile</Link>
-              {onEditProfile && (
-                <button 
-                  onClick={onEditProfile}
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Edit Profile
-                </button>
-              )}
               <button 
                 onClick={handleLogout}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
-// Mock data for potential matches. this would be the user's matches' full data from MongoDB 
+// Mock data for past matches. this would be the user's matches' full data from MongoDB 
 const mockMatches = [
   {
     id: 1,
@@ -115,28 +115,33 @@ const Matches = () => {
   const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState<typeof mockMatches[0] | null>(null);
   const [showContact, setShowContact] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleEditProfile = () => {
     navigate('/profile');
   };
 
-  const handleMessage = () => {
+  const handleMessage = (match: typeof mockMatches[0]) => {
+    setSelectedMatch(match);
     setShowContact(true);
+  };
+
+  const handleViewProfile = (match: typeof mockMatches[0]) => {
+    setSelectedMatch(match);
+    setShowProfile(true);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar 
         isAuthenticated={true} 
-        onEditProfile={handleEditProfile}
       />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Your Matches</h1>
-            <p className="text-gray-400">Find your perfect roommate from our curated matches</p>
+            <h1 className="text-3xl font-bold mb-2">Your Match History</h1>
           </div>
 
           {/* Matches Grid */}
@@ -145,7 +150,7 @@ const Matches = () => {
               <div
                 key={match.id}
                 className="bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700 hover:border-blue-500/50 transition-all cursor-pointer"
-                onClick={() => setSelectedMatch(match)}
+                onClick={() => handleViewProfile(match)}
               >
                 <div className="flex items-center space-x-4 mb-4">
                   <img
@@ -180,13 +185,18 @@ const Matches = () => {
         </div>
       </div>
 
-      {/* Match Detail Modal */}
-      {selectedMatch && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-2xl p-8 w-full max-w-2xl relative">
-            {/* Close button */}
+      {/* Contact Info Modal */}
+      {showContact && selectedMatch && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+          onClick={() => setShowContact(false)}
+        >
+          <div 
+            className="bg-gray-800 rounded-2xl p-8 w-full max-w-md relative mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
-              onClick={() => setSelectedMatch(null)}
+              onClick={() => setShowContact(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +204,45 @@ const Matches = () => {
               </svg>
             </button>
 
-            {/* Match details */}
+            <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Email</p>
+                <p className="font-medium">{selectedMatch.contact.email}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Phone</p>
+                <p className="font-medium">{selectedMatch.contact.phone}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Instagram</p>
+                <p className="font-medium">{selectedMatch.contact.instagram}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Profile Modal */}
+      {showProfile && selectedMatch && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto py-8"
+          onClick={() => setShowProfile(false)}
+        >
+          <div 
+            className="bg-gray-800 rounded-2xl p-8 w-full max-w-2xl relative mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowProfile(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
             <div className="flex items-center space-x-6 mb-8">
               <img
                 src={selectedMatch.image}
@@ -206,39 +254,60 @@ const Matches = () => {
                 <p className="text-gray-400">{selectedMatch.occupation}</p>
                 <p className="text-gray-400">{selectedMatch.location}</p>
               </div>
-              <div className="ml-auto">
-                <span className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-full text-lg font-semibold">
-                  {selectedMatch.matchScore}% Match
-                </span>
-              </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
               <div>
                 <h3 className="text-lg font-semibold text-blue-400 mb-2">About</h3>
                 <p className="text-gray-300">{selectedMatch.bio}</p>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-blue-400 mb-2">Compatibility</h3>
-                <div className="grid grid-cols-3 gap-4">
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Living Preferences</h3>
+                <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-700/50 p-4 rounded-lg">
-                    <p className="text-gray-400 text-sm mb-1">Lifestyle</p>
+                    <p className="text-gray-400 text-sm mb-1">Cleanliness</p>
                     <p className="font-medium">{selectedMatch.compatibility.lifestyle}</p>
+                  </div>
+                  <div className="bg-gray-700/50 p-4 rounded-lg">
+                    <p className="text-gray-400 text-sm mb-1">Noise Level</p>
+                    <p className="font-medium">{selectedMatch.compatibility.noiseLevel}</p>
                   </div>
                   <div className="bg-gray-700/50 p-4 rounded-lg">
                     <p className="text-gray-400 text-sm mb-1">Schedule</p>
                     <p className="font-medium">{selectedMatch.compatibility.schedule}</p>
                   </div>
                   <div className="bg-gray-700/50 p-4 rounded-lg">
-                    <p className="text-gray-400 text-sm mb-1">Noise Level</p>
-                    <p className="font-medium">{selectedMatch.compatibility.noiseLevel}</p>
+                    <p className="text-gray-400 text-sm mb-1">Guests</p>
+                    <p className="font-medium">Occasional</p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-blue-400 mb-2">Interests</h3>
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Lifestyle & Habits</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-700/50 p-4 rounded-lg">
+                    <p className="text-gray-400 text-sm mb-1">Smoking</p>
+                    <p className="font-medium">Non-smoker</p>
+                  </div>
+                  <div className="bg-gray-700/50 p-4 rounded-lg">
+                    <p className="text-gray-400 text-sm mb-1">Pets</p>
+                    <p className="font-medium">No pets</p>
+                  </div>
+                  <div className="bg-gray-700/50 p-4 rounded-lg">
+                    <p className="text-gray-400 text-sm mb-1">Cooking</p>
+                    <p className="font-medium">Frequently</p>
+                  </div>
+                  <div className="bg-gray-700/50 p-4 rounded-lg">
+                    <p className="text-gray-400 text-sm mb-1">Social Life</p>
+                    <p className="font-medium">Balanced</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Interests & Activities</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedMatch.interests.map((interest) => (
                     <span
@@ -251,55 +320,32 @@ const Matches = () => {
                 </div>
               </div>
 
-              {/* Contact Information Section */}
-              {showContact ? (
-                <div className="bg-gray-700/50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-400 mb-4">Contact Information</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-gray-400 text-sm mb-1">Email</p>
-                      <p className="font-medium">{selectedMatch.contact.email}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-sm mb-1">Phone</p>
-                      <p className="font-medium">{selectedMatch.contact.phone}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-sm mb-1">Instagram</p>
-                      <p className="font-medium">{selectedMatch.contact.instagram}</p>
-                    </div>
-                  </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Additional Notes</h3>
+                <div className="bg-gray-700/50 p-4 rounded-lg">
+                  <p className="text-gray-300">
+                    Looking for a roommate who values cleanliness and quiet study time. 
+                    Prefer to keep common areas organized and enjoy cooking together occasionally.
+                  </p>
                 </div>
-              ) : null}
+              </div>
 
               <div className="flex justify-end space-x-4 pt-6">
                 <button
                   onClick={() => {
-                    setSelectedMatch(null);
-                    setShowContact(false);
+                    setShowProfile(false);
+                    setShowContact(true);
                   }}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  View Contact Info
+                </button>
+                <button
+                  onClick={() => setShowProfile(false)}
                   className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
                 >
-                  Skip
+                  Close
                 </button>
-                {!showContact ? (
-                  <button 
-                    onClick={handleMessage}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
-                  >
-                    Get Contact Info
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => {
-                      setSelectedMatch(null);
-                      setShowContact(false);
-                    }}
-                    className="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-colors"
-                  >
-                    Close
-                  </button>
-                )}
               </div>
             </div>
           </div>

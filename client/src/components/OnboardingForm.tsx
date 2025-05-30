@@ -39,6 +39,7 @@ interface OnboardingData {
     phone: string;
     instagram: string;
   };
+  additionalNotes: string;
 }
 
 const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
@@ -74,7 +75,8 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
       email: '',
       phone: '',
       instagram: ''
-    }
+    },
+    additionalNotes: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -408,6 +410,17 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
                   </button>
                 ))}
               </div>
+            </div>
+            {/* Additional Notes */}
+            <div className="mb-6">
+              <label className="block text-gray-300 mb-2">Additional Notes</label>
+              <textarea
+                value={formData.additionalNotes}
+                onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
+                className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
+                rows={4}
+                placeholder="Share any additional preferences or requirements for your ideal roommate..."
+              />
             </div>
           </div>
         );

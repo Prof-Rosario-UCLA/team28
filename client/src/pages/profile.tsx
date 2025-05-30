@@ -26,6 +26,7 @@ interface ProfileData {
     phone: string;
     instagram: string;
   };
+  additionalNotes: string;
 }
 
 const Profile = () => {
@@ -114,11 +115,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      <Navbar 
-        isAuthenticated={true} 
-        onEditProfile={handleEdit}
-        isEditing={isEditing}
-      />
+      <Navbar isAuthenticated={true} />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -156,12 +153,22 @@ const Profile = () => {
                   </div>
                 ) : (
                   <>
-                    <h1 className="text-3xl font-bold mb-2">{profileData.fullName}</h1>
-                    <p className="text-gray-400">{profileData.occupation}</p>
-                    <p className="text-gray-400">{profileData.location}</p>
-                    <p className="text-gray-400 text-sm mt-2">
-                      Member since {new Date(profileData.createdAt).toLocaleDateString()}
-                    </p>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h1 className="text-3xl font-bold mb-2">{profileData.fullName}</h1>
+                        <p className="text-gray-400">{profileData.occupation}</p>
+                        <p className="text-gray-400">{profileData.location}</p>
+                        <p className="text-gray-400 text-sm mt-2">
+                          Member since {new Date(profileData.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleEdit}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
@@ -340,6 +347,19 @@ const Profile = () => {
                     </>
                   )}
                 </div>
+              </div>
+
+              {/* Additional Notes */}
+              <div className="mb-6">
+                <label className="block text-gray-300 mb-2">Additional Notes</label>
+                <textarea
+                  value={editedData.additionalNotes}
+                  onChange={(e) => setEditedData(prev => prev ? { ...prev, additionalNotes: e.target.value } : null)}
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
+                  rows={4}
+                  placeholder="Share any additional preferences or requirements for your ideal roommate..."
+                  disabled={!isEditing}
+                />
               </div>
             </div>
 

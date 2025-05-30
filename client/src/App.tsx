@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Landing from './pages/Landing';
 import Profile from './pages/Profile';
 import Matches from './pages/Matches';
+import PotentialMatches from './pages/PotentialMatches';
 import OnboardingForm from './components/OnboardingForm';
+import CookieConsent from './components/CookieConsent';
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -27,35 +29,46 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/matches"
-          element={
-            <ProtectedRoute>
-              <Matches />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/matches"
+            element={
+              <ProtectedRoute>
+                <Matches />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/potential-matches"
+            element={
+              <ProtectedRoute>
+                <PotentialMatches />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        <CookieConsent />
 
-      {/* Onboarding Form */}
-      {showOnboarding && (
-        <OnboardingForm
-          onComplete={() => {
-            setShowOnboarding(false);
-            setIsAuthenticated(true);
-          }}
-        />
-      )}
+        {/* Onboarding Form */}
+        {showOnboarding && (
+          <OnboardingForm
+            onComplete={() => {
+              setShowOnboarding(false);
+              setIsAuthenticated(true);
+            }}
+          />
+        )}
+      </div>
     </Router>
   );
 };
