@@ -4,11 +4,11 @@ import Navbar from '../components/Navbar';
 
 interface ProfileData {
   age: string;
-  occupation: string;
-  location: string;
+  occupation: string;  //embedded field
+  location: string;  //embedded field
   moveInDate: string;
-  budget: string;
-  preferredLocation: string;
+  budget: string;  //try to use numerical value
+  preferredLocation: string;  //embedded field
   roomType: string;
   leaseLength: string;
   smoking: string;
@@ -17,8 +17,8 @@ interface ProfileData {
   noiseLevel: string;
   workSchedule: string;
   guests: string;
-  bio: string;
-  interests: string[];
+  bio: string;  //embedded field
+  interests: string[];  //embedded field???
   fullName: string;
   createdAt: string;
   contact: {
@@ -26,7 +26,7 @@ interface ProfileData {
     phone: string;
     instagram: string;
   };
-  additionalNotes: string;
+  additionalNotes: string; //embedded field
 }
 
 const Profile = () => {
