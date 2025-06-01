@@ -1,15 +1,14 @@
 const User = require('../models/User'); 
-const { upsertVectorProfile, encodeVector } = require('../utils/qdrantUtils');
+const { upsertProfileVector, encodeVector } = require('../utils/qdrantUtils');
 
 const insertProfile = async (req, res) => {
     try {
+        console.log('Received profile data:', req.body);
         const { userId, profileData } = req.body;
-
         /* INSERT LOGIC HERE FOR MONGO DB */
-
         //Insert profile into Qdrant
         const userVector = encodeVector(profileData);
-        const newProfile = await upsertVectorProfile(userId, userVector);
+        const newProfile = await upsertProfileVector(userId, userVector);
         if (!newProfile) {
             return res.status(400).json({ message: 'Failed to create profile' });
         }
