@@ -1,16 +1,20 @@
+// userController.js: this file contains the logic for the user route, called by the auth.js file
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { redis } = require('../config/database');
 
-// Register new user
+// Register new user 
 const register = async (req, res) => {
     try {
+        console.log('Register request received:', req.body);
         const { email, password, name } = req.body;
 
         // Check if user already exists
         let user = await User.findOne({ email });
         if (user) {
+            console.log('User already exists:', email);
             return res.status(400).json({ message: 'User already exists' });
         }
 
@@ -27,6 +31,7 @@ const register = async (req, res) => {
 
         // Save user
         await user.save();
+        console.log('User saved successfully:', email);
 
         // Create JWT token
         const token = jwt.sign(
@@ -35,6 +40,7 @@ const register = async (req, res) => {
             { expiresIn: '24h' }
         );
 
+        console.log('Token created successfully');
         res.status(201).json({
             token,
             user: {
@@ -44,7 +50,8 @@ const register = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Register error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 

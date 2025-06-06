@@ -17,18 +17,30 @@ const { connectMongoDB, redis} = require('./config/database');
 // Route imports
 const matchRoutes = require('./routes/matches');
 const userRoutes = require('./routes/profile');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Route mounting
 app.use('/api/matches', matchRoutes);
 app.use('/api/profile', userRoutes);
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authRoutes);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ message: 'Server error', error: err.message });
+});
 
 // Start server
 const PORT = process.env.PORT || 3000;
