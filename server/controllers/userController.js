@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const config = require('../config/config');
+const { redis } = require('../config/database');
 
 // Register new user
 const register = async (req, res) => {
@@ -31,7 +31,7 @@ const register = async (req, res) => {
         // Create JWT token
         const token = jwt.sign(
             { userId: user._id, email: user.email },
-            config.jwtSecret,
+            process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
 
@@ -68,7 +68,7 @@ const login = async (req, res) => {
         // Create JWT token
         const token = jwt.sign(
             { userId: user._id, email: user.email },
-            config.jwtSecret,
+            process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
 
