@@ -12,12 +12,33 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    } else {
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userData');
+  const handleLogout = async () => {
+    try {
+      if (onLogout) {
+        onLogout();
+      } else {
+        const token = localStorage.getItem('token');
+        
+        // Call logout endpoint
+        if (token) {
+          await fetch('http://localhost:3000/api/auth/logout', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+        }
+
+        // Clear token
+        localStorage.removeItem('token');
+        
+        // Navigate to home page
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear token and navigate even if the API call fails
+      localStorage.removeItem('token');
       navigate('/');
     }
   };

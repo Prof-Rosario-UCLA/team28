@@ -26,24 +26,49 @@ const SignupForm = ({ onClose, onSignupSuccess }: SignupFormProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Handle signup logic with backend
-    console.log('Signup attempt:', formData);
     
-    // Store user data in localStorage
-    localStorage.setItem('userData', JSON.stringify({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      password: formData.password // todo: dont store passwords in localStorage, this is temporary bc we dont have backend yet
-    }));
-    
-    // Set authentication state
-    localStorage.setItem('isAuthenticated', 'true');
-    
-    onClose();
-    onSignupSuccess();
+    try {
+      // Validate passwords match
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error('Passwords do not match');
+      }
+
+      const requestData = {
+        email: formData.email,
+        password: formData.password,
+        name: `${formData.firstName} ${formData.lastName}`
+      };
+
+      // send signup request to server
+      const response = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(requestData),
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to sign up');
+      }
+
+      const data = await response.json();
+      
+      // Store token in localStorage
+      localStorage.setItem('token', data.token);
+      
+      // Close the form and trigger success callback
+      onClose();
+      onSignupSuccess();
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert(error instanceof Error ? error.message : 'Failed to sign up');
+    }
   };
 
   return (

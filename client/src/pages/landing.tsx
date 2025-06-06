@@ -5,30 +5,59 @@ import SignupForm from '../components/SignupForm';
 import OnboardingForm from '../components/OnboardingForm';
 import Navbar from '../components/Navbar';
 
-const Landing = () => {
+interface LandingProps {
+  onSignupSuccess: () => void;
+  onLoginSuccess?: () => void;
+}
+
+const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
   const navigate = useNavigate();
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('isAuthenticated') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if user is authenticated and has completed their profile
+  // check if user is authenticated and has completed their profile
   useEffect(() => {
-    const userData = localStorage.getItem('userData');
-    
-    if (isAuthenticated && userData) {
-      const data = JSON.parse(userData);
-      // Only redirect if the user has completed their profile
-      if (data.profile) {
-        navigate('/profile');
+    const checkAuthAndProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        // verify token + get user profile
+        const response = await fetch('http://localhost:3000/api/profile/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsAuthenticated(true);
+          // if user has a profile, redirect to profile page
+          if (data.profile) {
+            navigate('/profile');
+          }
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
       }
-    }
+    };
+
+    checkAuthAndProfile();
   }, [navigate]);
 
   const handleSignupSuccess = () => {
+    setShowSignupForm(false);
     setShowOnboarding(true);
+  };
+
+  const handleLoginSuccess = () => {
+    setShowLoginForm(false);
+    setIsAuthenticated(true);
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
   };
 
   return (
@@ -50,13 +79,13 @@ const Landing = () => {
               onClick={() => setShowSignupForm(true)}
               className="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg"
             >
-              Get Started
+              Sign Up
             </button>
             <button 
               onClick={() => setShowLoginForm(true)}
               className="bg-transparent text-white px-8 py-4 rounded-lg font-semibold border-2 border-blue-500 hover:bg-blue-500/10 transition-all"
             >
-              Learn More
+              Log In
             </button>
           </div>
         </div>
@@ -94,7 +123,12 @@ const Landing = () => {
       </div>
 
       {/* Login Form Modal */}
-      {showLoginForm && <LoginForm onClose={() => setShowLoginForm(false)} />}
+      {showLoginForm && (
+        <LoginForm 
+          onClose={() => setShowLoginForm(false)} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
       
       {/* Signup Form Modal */}
       {showSignupForm && (
@@ -109,7 +143,7 @@ const Landing = () => {
         <OnboardingForm
           onComplete={() => {
             setShowOnboarding(false);
-            // TODO: Navigate to matches page
+            navigate('/profile');
           }}
         />
       )}

@@ -4,21 +4,21 @@ import Navbar from '../components/Navbar';
 
 interface ProfileData {
   age: string;
-  occupation: string;  //embedded field
-  location: string;  //embedded field
+  occupation: string;
+  location: string;
   moveInDate: string;
-  budget: string;  //try to use numerical value
-  preferredLocation: string;  //embedded field
-  roomType: string;
+  budget: string;
+  preferredLocation: string;
+  roomType: 'private' | 'shared' | 'flexible';
   leaseLength: string;
-  smoking: string;
-  pets: string;
-  cleanliness: string;
-  noiseLevel: string;
-  workSchedule: string;
-  guests: string;
-  bio: string;  //embedded field
-  interests: string[];  //embedded field???
+  smoking: 'yes' | 'no' | 'sometimes';
+  pets: 'yes' | 'no' | 'flexible';
+  cleanliness: 'very clean' | 'moderate' | 'relaxed';
+  noiseLevel: 'quiet' | 'moderate' | 'social';
+  workSchedule: '9-5' | 'night shift' | 'flexible';
+  guests: 'rarely' | 'sometimes' | 'often';
+  bio: string;
+  interests: string[];
   fullName: string;
   createdAt: string;
   contact: {
@@ -26,38 +26,53 @@ interface ProfileData {
     phone: string;
     instagram: string;
   };
-  additionalNotes: string; //embedded field
+  additionalNotes: string;
 }
 
 const Profile = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
-  const [userData, setUserData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedData, setEditedData] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Fetch profile data from MongoDB
   useEffect(() => {
-    // Get user data from localStorage
-    const storedData = localStorage.getItem('userData');
-    if (storedData) {
-      const data = JSON.parse(storedData);
-      const profileWithContact = {
-        ...data.profile,
-        contact: data.profile.contact || {
-          email: '',
-          phone: '',
-          instagram: ''
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/');
+          return;
         }
-      };
-      setUserData(data);
-      setProfileData(profileWithContact);
-      setEditedData(profileWithContact);
-    }
-  }, []);
+
+        const response = await fetch('http://localhost:3000/api/profile/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Profile fetch error:', errorText);
+          throw new Error('Failed to fetch profile');
+        }
+
+        const data = await response.json();
+        setProfileData(data.profile);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        setError('Failed to load profile data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userData');
+    localStorage.removeItem('token');
     navigate('/');
   };
 
@@ -67,39 +82,69 @@ const Profile = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedData(profileData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setEditedData(prev => prev ? { ...prev, [name]: value } : null);
+    if (!profileData) return;
+
+    // Handle nested contact fields
+    if (name.startsWith('contact.')) {
+      const field = name.split('.')[1];
+      setProfileData(prev => prev ? {
+        ...prev,
+        contact: { ...prev.contact, [field]: value }
+      } : null);
+    } else {
+      setProfileData(prev => prev ? { ...prev, [name]: value } : null);
+    }
   };
 
   const handleInterestsChange = (interest: string) => {
-    if (!editedData) return;
-    const newInterests = editedData.interests.includes(interest)
-      ? editedData.interests.filter(i => i !== interest)
-      : [...editedData.interests, interest];
-    setEditedData({ ...editedData, interests: newInterests });
+    if (!profileData) return;
+    const newInterests = profileData.interests.includes(interest)
+      ? profileData.interests.filter(i => i !== interest)
+      : [...profileData.interests, interest];
+    setProfileData(prev => prev ? { ...prev, interests: newInterests } : null);
   };
 
-  const handleSave = () => {
-    if (!editedData) return;
+  const handleSave = async () => {
+    if (!profileData) return;
     
-    // Update localStorage
-    const updatedUserData = {
-      ...userData,
-      profile: editedData
-    };
-    localStorage.setItem('userData', JSON.stringify(updatedUserData));
-    
-    // Update state
-    setProfileData(editedData);
-    setUserData(updatedUserData);
-    setIsEditing(false);
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/');
+        return;
+      }
+
+      const response = await fetch('http://localhost:3000/api/profile/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          profile: profileData
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Profile update error:', errorText);
+        throw new Error(errorText || 'Failed to update profile');
+      }
+
+      const data = await response.json();
+      setProfileData(data.profile);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setError('Failed to update profile');
+    }
   };
 
-  if (!profileData || !userData || !editedData) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center">
         <div className="text-center">
@@ -108,6 +153,27 @@ const Profile = () => {
         </div>
       </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4 text-red-400">Error</h2>
+          <p className="text-gray-400">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profileData) {
+    return null;
   }
 
   const commonInputClasses = "w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
@@ -123,7 +189,7 @@ const Profile = () => {
           <div className="bg-gray-800/50 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-gray-700">
             <div className="flex items-center space-x-6">
               <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-3xl font-bold">
-                {userData.firstName?.[0]}{userData.lastName?.[0]}
+                {profileData.fullName?.[0]}{profileData.fullName?.[1]}
               </div>
               <div className="flex-grow">
                 {isEditing ? (
@@ -134,7 +200,7 @@ const Profile = () => {
                         type="text"
                         id="occupation"
                         name="occupation"
-                        value={editedData.occupation}
+                        value={profileData.occupation}
                         onChange={handleChange}
                         className={commonInputClasses}
                       />
@@ -145,7 +211,7 @@ const Profile = () => {
                         type="text"
                         id="location"
                         name="location"
-                        value={editedData.location}
+                        value={profileData.location}
                         onChange={handleChange}
                         className={commonInputClasses}
                       />
@@ -188,7 +254,7 @@ const Profile = () => {
                     <textarea
                       id="bio"
                       name="bio"
-                      value={editedData.bio}
+                      value={profileData.bio}
                       onChange={handleChange}
                       rows={4}
                       className={commonInputClasses}
@@ -211,7 +277,7 @@ const Profile = () => {
                           type="text"
                           id="budget"
                           name="budget"
-                          value={editedData.budget}
+                          value={profileData.budget}
                           onChange={handleChange}
                           className={commonInputClasses}
                         />
@@ -222,7 +288,7 @@ const Profile = () => {
                           type="text"
                           id="preferredLocation"
                           name="preferredLocation"
-                          value={editedData.preferredLocation}
+                          value={profileData.preferredLocation}
                           onChange={handleChange}
                           className={commonInputClasses}
                         />
@@ -232,13 +298,13 @@ const Profile = () => {
                         <select
                           id="roomType"
                           name="roomType"
-                          value={editedData.roomType}
+                          value={profileData.roomType}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
                           <option value="private">Private Room</option>
                           <option value="shared">Shared Room</option>
-                          <option value="studio">Studio</option>
+                          <option value="flexible">Flexible</option>
                         </select>
                       </div>
                       <div>
@@ -246,7 +312,7 @@ const Profile = () => {
                         <select
                           id="leaseLength"
                           name="leaseLength"
-                          value={editedData.leaseLength}
+                          value={profileData.leaseLength}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
@@ -292,11 +358,8 @@ const Profile = () => {
                           type="email"
                           id="contact.email"
                           name="contact.email"
-                          value={editedData.contact.email}
-                          onChange={(e) => setEditedData(prev => prev ? {
-                            ...prev,
-                            contact: { ...prev.contact, email: e.target.value }
-                          } : null)}
+                          value={profileData.contact.email}
+                          onChange={handleChange}
                           className={commonInputClasses}
                         />
                       </div>
@@ -306,11 +369,8 @@ const Profile = () => {
                           type="tel"
                           id="contact.phone"
                           name="contact.phone"
-                          value={editedData.contact.phone}
-                          onChange={(e) => setEditedData(prev => prev ? {
-                            ...prev,
-                            contact: { ...prev.contact, phone: e.target.value }
-                          } : null)}
+                          value={profileData.contact.phone}
+                          onChange={handleChange}
                           className={commonInputClasses}
                         />
                       </div>
@@ -320,11 +380,8 @@ const Profile = () => {
                           type="text"
                           id="contact.instagram"
                           name="contact.instagram"
-                          value={editedData.contact.instagram}
-                          onChange={(e) => setEditedData(prev => prev ? {
-                            ...prev,
-                            contact: { ...prev.contact, instagram: e.target.value }
-                          } : null)}
+                          value={profileData.contact.instagram}
+                          onChange={handleChange}
                           className={commonInputClasses}
                           placeholder="@username"
                         />
@@ -353,12 +410,26 @@ const Profile = () => {
               <div className="mb-6">
                 <label className="block text-gray-300 mb-2">Additional Notes</label>
                 <textarea
-                  value={editedData.additionalNotes}
-                  onChange={(e) => setEditedData(prev => prev ? { ...prev, additionalNotes: e.target.value } : null)}
+                  value={profileData.additionalNotes}
+                  onChange={(e) => setProfileData(prev => prev ? { ...prev, additionalNotes: e.target.value } : null)}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
                   rows={4}
                   placeholder="Share any additional preferences or requirements for your ideal roommate..."
                   disabled={!isEditing}
+                />
+              </div>
+
+              {/* Move-in Date */}
+              <div>
+                <label htmlFor="moveInDate" className={commonLabelClasses}>Preferred Move-in Date</label>
+                <input
+                  type="date"
+                  id="moveInDate"
+                  name="moveInDate"
+                  value={profileData.moveInDate}
+                  onChange={handleChange}
+                  className={commonInputClasses}
+                  required
                 />
               </div>
             </div>
@@ -376,13 +447,13 @@ const Profile = () => {
                         <select
                           id="smoking"
                           name="smoking"
-                          value={editedData.smoking}
+                          value={profileData.smoking}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
+                          <option value="no">No Smoking</option>
                           <option value="sometimes">Sometimes</option>
+                          <option value="yes">Smoker</option>
                         </select>
                       </div>
                       <div>
@@ -390,13 +461,13 @@ const Profile = () => {
                         <select
                           id="pets"
                           name="pets"
-                          value={editedData.pets}
+                          value={profileData.pets}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                          <option value="open">Open to pets</option>
+                          <option value="no">No Pets</option>
+                          <option value="flexible">Flexible</option>
+                          <option value="yes">Have Pets</option>
                         </select>
                       </div>
                       <div>
@@ -404,7 +475,7 @@ const Profile = () => {
                         <select
                           id="cleanliness"
                           name="cleanliness"
-                          value={editedData.cleanliness}
+                          value={profileData.cleanliness}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
@@ -418,13 +489,13 @@ const Profile = () => {
                         <select
                           id="noiseLevel"
                           name="noiseLevel"
-                          value={editedData.noiseLevel}
+                          value={profileData.noiseLevel}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
                           <option value="quiet">Quiet</option>
                           <option value="moderate">Moderate</option>
-                          <option value="lively">Lively</option>
+                          <option value="social">Social</option>
                         </select>
                       </div>
                     </>
@@ -462,7 +533,7 @@ const Profile = () => {
                           key={interest}
                           onClick={() => handleInterestsChange(interest)}
                           className={`px-4 py-2 rounded-full transition-colors ${
-                            editedData.interests.includes(interest)
+                            profileData.interests.includes(interest)
                               ? 'bg-blue-500 text-white'
                               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                           }`}
@@ -497,14 +568,13 @@ const Profile = () => {
                         <select
                           id="workSchedule"
                           name="workSchedule"
-                          value={editedData.workSchedule}
+                          value={profileData.workSchedule}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
                           <option value="9-5">9 AM - 5 PM</option>
-                          <option value="flexible">Flexible</option>
                           <option value="night shift">Night Shift</option>
-                          <option value="remote">Remote</option>
+                          <option value="flexible">Flexible</option>
                         </select>
                       </div>
                       <div>
@@ -512,13 +582,13 @@ const Profile = () => {
                         <select
                           id="guests"
                           name="guests"
-                          value={editedData.guests}
+                          value={profileData.guests}
                           onChange={handleChange}
                           className={commonInputClasses}
                         >
-                          <option value="frequent">Frequent guests welcome</option>
-                          <option value="occasional">Occasional guests okay</option>
-                          <option value="rarely">Rarely have guests</option>
+                          <option value="rarely">Rarely</option>
+                          <option value="sometimes">Sometimes</option>
+                          <option value="often">Often</option>
                         </select>
                       </div>
                     </>

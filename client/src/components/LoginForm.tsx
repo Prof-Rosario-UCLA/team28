@@ -5,9 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   onClose: () => void;
+  onLoginSuccess?: () => void;
 }
 
-const LoginForm = ({ onClose }: LoginFormProps) => {
+const LoginForm = ({ onClose, onLoginSuccess }: LoginFormProps) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -23,25 +24,42 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Handle login logic with backend
-    console.log('Login attempt:', formData);
     
-    // For now, just check if user data exists in localStorage
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const user = JSON.parse(userData);
-      if (user.email === formData.email) {
-        // Set authentication state
-        localStorage.setItem('isAuthenticated', 'true');
-        onClose();
-        navigate('/profile');
-      } else {
-        alert('Invalid email or password');
+    try {
+      // send login request to server
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to login');
       }
-    } else {
-      alert('No account found with this email');
+
+      const data = await response.json();
+      
+      // store token in localStorage
+      localStorage.setItem('token', data.token);
+      
+      // Close the form and trigger success callback
+      onClose();
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+      navigate('/profile');
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error instanceof Error ? error.message : 'Failed to login');
     }
   };
 

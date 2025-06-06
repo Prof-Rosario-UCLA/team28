@@ -79,6 +79,7 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
     additionalNotes: ''
   });
 
+  // when user changes input, this function is called
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -96,26 +97,44 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // when user clicks complete profile, we save the profile to the mongo database (user table)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step < 5) {
       setStep(step + 1);
     } else {
-      // Store profile data in localStorage
-      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-      localStorage.setItem('userData', JSON.stringify({
-        ...userData,
-        profile: {
-          ...formData,
-          // Add any additional profile fields here
-          fullName: `${userData.firstName} ${userData.lastName}`,
-          createdAt: new Date().toISOString()
+      try {
+        // 1. get the auth token from localStorage to make sure user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found');
         }
-      }));
-      
-      console.log('Profile data:', formData);
-      onComplete();
-      navigate('/profile');
+
+        // 2. send profile data to server by calling the update profile route
+        const response = await fetch('http://localhost:3000/api/profile/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            profile: formData
+          })
+        });
+
+        // 3. if the profile is updated successfully, we navigate to the profile page
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to update profile');
+        }
+
+        onComplete();
+        navigate('/profile');
+
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert(error instanceof Error ? error.message : 'Failed to update profile');
+      }
     }
   };
 
@@ -431,10 +450,10 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-2xl p-8 w-full max-w-2xl relative">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden">
+      <div className="bg-gray-800 rounded-2xl w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
         {/* Progress bar */}
-        <div className="mb-8">
+        <div className="sticky top-0 bg-gray-800 p-8 pb-4 z-10 rounded-t-2xl">
           <div className="flex justify-between mb-2">
             <span className="text-sm text-gray-400">Step {step} of 5</span>
             <span className="text-sm text-blue-400">{Math.round((step / 5) * 100)}% Complete</span>
@@ -448,7 +467,7 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 px-8 pb-8">
           {renderStep()}
 
           {/* Contact Information Section */}
@@ -503,7 +522,6 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
                 }))}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 placeholder="@username"
-                required
               />
             </div>
           </div>

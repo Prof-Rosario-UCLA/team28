@@ -9,18 +9,50 @@ import CookieConsent from './components/CookieConsent';
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Check localStorage on initial load
-    return localStorage.getItem('isAuthenticated') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Update localStorage when authentication state changes
+  // check authentication status on load
   useEffect(() => {
-    localStorage.setItem('isAuthenticated', isAuthenticated.toString());
-  }, [isAuthenticated]);
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
 
-  // Protected Route component
+        // verify token with backend
+        const response = await fetch('http://localhost:3000/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          // Token is invalid or expired
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // protected route component
   const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
     if (!isAuthenticated) {
       return <Navigate to="/" />;
     }
@@ -31,7 +63,20 @@ const App = () => {
     <Router>
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={
+            <Landing 
+              onSignupSuccess={() => setIsAuthenticated(true)} 
+              onLoginSuccess={() => setIsAuthenticated(true)}
+            />
+          } />
+          <Route path="/about" element={<div className="container mx-auto px-4 py-20 text-white">
+            <h1 className="text-4xl font-bold mb-8">About RoomieMatch</h1>
+            <p className="text-xl text-gray-300">Find your perfect roommate match!</p>
+          </div>} />
+          <Route path="/contact" element={<div className="container mx-auto px-4 py-20 text-white">
+            <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
+            <p className="text-xl text-gray-300">Get in touch with our team!</p>
+          </div>} />
           <Route
             path="/profile"
             element={
