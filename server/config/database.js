@@ -19,20 +19,7 @@ const qdrant = new QdrantClient({
   apiKey: process.env.QDRANT_API_KEY
 });
 
-// Test Qdrant connection
-const testQdrantConnection = async () => {
-  try {
-    await qdrant.getCollections();
-    console.log('Qdrant connected successfully');
-  } catch (error) {
-    console.error('Qdrant connection error:', error);
-    throw error;
-  }
-};
-
 module.exports = {
   connectMongoDB,
-  //redis,
-  qdrant,
-  testQdrantConnection
+  qdrant
 }; 

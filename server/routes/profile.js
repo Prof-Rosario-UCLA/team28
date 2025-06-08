@@ -5,8 +5,7 @@ const router = express.Router();
 const { insertProfile } = require('../controllers/profilesController');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
-const { encodeVector, upsertProfileVector, searchSimilarUsers } = require('../utils/qdrantUtils');
-
+const { encodeVector, upsertProfileVector } = require('../utils/qdrantUtils');
 
 // update user profile (called by onboarding form and profile page)
 router.put('/update', auth, async (req, res) => {
@@ -79,46 +78,6 @@ router.get('/me', auth, async (req, res) => {
   } catch (error) {
     console.error('Profile fetch error:', error);
     res.status(500).json({ message: 'Error fetching profile', error: error.message });
-  }
-});
-
-// Test endpoint to verify Qdrant functionality
-// todo: remove this later
-router.get('/test-qdrant', auth, async (req, res) => {
-  try {
-    // Get user's profile from MongoDB
-    const user = await User.findById(req.user.userId);
-    if (!user || !user.profile) {
-      return res.status(404).json({ error: 'User profile not found' });
-    }
-
-    // Convert MongoDB ObjectId to numeric ID for Qdrant
-    const qdrantId = parseInt(req.user.userId.toString().slice(-6), 16);
-
-    // Search for similar profiles
-    const similarProfiles = await searchSimilarUsers(qdrantId, 5);
-
-    // Get full profile details for each similar user using the MongoDB ID from payload
-    const similarUsers = await Promise.all(
-      similarProfiles.map(async (profile) => {
-        // Use the MongoDB ID stored in the payload
-        const mongoId = profile.payload.mongoId;
-        const user = await User.findById(mongoId);
-        return {
-          similarity: profile.score,
-          profile: user.profile
-        };
-      })
-    );
-
-    res.json({
-      message: 'Qdrant test successful',
-      yourProfile: user.profile,
-      similarProfiles: similarUsers
-    });
-  } catch (error) {
-    console.error('Qdrant test error:', error);
-    res.status(500).json({ error: error.message });
   }
 });
 
