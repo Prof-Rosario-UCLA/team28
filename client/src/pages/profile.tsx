@@ -35,6 +35,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [testResults, setTestResults] = useState<any>(null);
 
   // Fetch profile data from MongoDB
   useEffect(() => {
@@ -141,6 +142,32 @@ const Profile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       setError('Failed to update profile');
+    }
+  };
+
+  const testQdrant = async () => { // todo: remove this later
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch('http://localhost:3000/api/profile/test-qdrant', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to test Qdrant');
+      }
+
+      const data = await response.json();
+      setTestResults(data);
+      console.log('Qdrant test results:', data);
+    } catch (error) {
+      console.error('Error testing Qdrant:', error);
+      alert(error instanceof Error ? error.message : 'Failed to test Qdrant');
     }
   };
 
@@ -628,6 +655,46 @@ const Profile = () => {
               </div>
             </div>
           )}
+
+          {/* Test Qdrant Button */}
+          <div className="mt-8 p-6 bg-gray-800 rounded-xl">
+            <h2 className="text-2xl font-bold mb-4">Test Qdrant Matching</h2>
+            <button
+              onClick={testQdrant}
+              className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+            >
+              Test Similar Profiles
+            </button>
+
+            {/* Display Test Results */}
+            {testResults && (
+              <div className="mt-6">
+                <h3 className="text-xl font-semibold mb-4">Test Results</h3>
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="font-semibold text-blue-400">Your Profile</h4>
+                    <pre className="mt-2 text-sm overflow-auto">
+                      {JSON.stringify(testResults.yourProfile, null, 2)}
+                    </pre>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-700 rounded-lg">
+                    <h4 className="font-semibold text-blue-400">Similar Profiles</h4>
+                    {testResults.similarProfiles.map((match: any, index: number) => (
+                      <div key={index} className="mt-4 p-4 bg-gray-600 rounded-lg">
+                        <div className="text-sm text-gray-300 mb-2">
+                          Similarity Score: {(match.similarity * 100).toFixed(2)}%
+                        </div>
+                        <pre className="text-sm overflow-auto">
+                          {JSON.stringify(match.profile, null, 2)}
+                        </pre>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

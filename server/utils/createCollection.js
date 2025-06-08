@@ -1,8 +1,9 @@
-require('dotenv').config({ path: '.env' });
+require('dotenv').config();
 const { qdrant } = require('../config/database');
 
+// creates a collection in qdrant
 async function createRoommateCollection() {
-  const collectionName = process.env.QDRANT_COLLECTION_NAME || 'roommate_collection';
+  const collectionName = process.env.QDRANT_COLLECTION_NAME || 'roommate_profiles';
   const vectorSize = 10; 
   
   try {
@@ -12,6 +13,20 @@ async function createRoommateCollection() {
     
     if (exists) {
       console.log(`Collection '${collectionName}' already exists.`);
+      // Create index if it doesn't exist
+      try {
+        await qdrant.createPayloadIndex(collectionName, {
+          field_name: 'id',
+          field_schema: 'integer'
+        });
+        console.log('Created index for id field');
+      } catch (error) {
+        if (error.message.includes('already exists')) {
+          console.log('Index for id field already exists');
+        } else {
+          throw error;
+        }
+      }
       return;
     }
     
@@ -23,16 +38,26 @@ async function createRoommateCollection() {
       },
     });
     
-    console.log(`Successfully created '${collectionName}' collection in Qdrant`);
+    // Create index for id field
+    await qdrant.createPayloadIndex(collectionName, {
+      field_name: 'id',
+      field_schema: 'integer'
+    });
+    
+    console.log(`Successfully created '${collectionName}' collection in Qdrant with id index`);
   } catch (error) {
     console.error('Error creating Qdrant collection:', error);
+    throw error;
   }
 }
 
 // Runs scripts
 createRoommateCollection()
-  .then(() => process.exit(0))
-  .catch(err => {
-    console.error('Unhandled error:', err);
+  .then(() => {
+    console.log('Collection creation completed');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('Failed to create collection:', error);
     process.exit(1);
   });

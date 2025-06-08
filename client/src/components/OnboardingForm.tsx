@@ -122,14 +122,13 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
           })
         });
 
-        // 3. if the profile is updated successfully, we navigate to the profile page
+        // 3. if the profile is updated successfully, we call onComplete
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(errorText || 'Failed to update profile');
         }
 
         onComplete();
-        navigate('/profile');
 
       } catch (error) {
         console.error('Error updating profile:', error);

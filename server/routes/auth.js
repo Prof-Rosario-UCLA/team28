@@ -1,4 +1,4 @@
-// auth.js: this file contains the routes for the auth controller, called by the app.js file
+// auth.js handles operations for auth page
 
 const express = require('express');
 const router = express.Router();

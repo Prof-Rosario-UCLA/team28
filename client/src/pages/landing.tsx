@@ -18,32 +18,33 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // check if user is authenticated and has completed their profile
-  useEffect(() => {
-    const checkAuthAndProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+  const checkAuthAndProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
 
-        // verify token + get user profile
-        const response = await fetch('http://localhost:3000/api/profile/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsAuthenticated(true);
-          // if user has a profile, redirect to profile page
-          if (data.profile) {
-            navigate('/profile');
-          }
+      // verify token + get user profile
+      const response = await fetch('http://localhost:3000/api/profile/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-      } catch (error) {
-        console.error('Auth check error:', error);
-      }
-    };
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        setIsAuthenticated(true);
+        // if user has a profile, redirect to profile page
+        if (data.profile) {
+          navigate('/profile');
+        }
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+    }
+  };
+
+  // Check auth on mount
+  useEffect(() => {
     checkAuthAndProfile();
   }, [navigate]);
 
@@ -58,6 +59,12 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
     if (onLoginSuccess) {
       onLoginSuccess();
     }
+  };
+
+  const handleOnboardingComplete = async () => {
+    setShowOnboarding(false);
+    // Check profile again after completion
+    await checkAuthAndProfile();
   };
 
   return (
@@ -141,10 +148,7 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
       {/* Onboarding Form */}
       {showOnboarding && (
         <OnboardingForm
-          onComplete={() => {
-            setShowOnboarding(false);
-            navigate('/profile');
-          }}
+          onComplete={handleOnboardingComplete}
         />
       )}
     </div>
