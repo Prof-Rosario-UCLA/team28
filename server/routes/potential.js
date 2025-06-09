@@ -14,7 +14,9 @@ router.get('/', auth, async (req, res) => {
     const similarUsers = await searchSimilarUsers(qdrantId, 20);
     
     // 2. Get full user data for all similar users from MongoDB
-    const userIds = similarUsers.map(match => match.payload.mongoId);
+    const userIds = similarUsers
+      .map(match => match.payload.mongoId)        
+      .filter(id => id !== req.user.userId); 
     const users = await User.find({ 
       _id: { $in: userIds } 
     }).select('-password');
