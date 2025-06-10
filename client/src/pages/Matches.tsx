@@ -6,6 +6,7 @@ import { getMatches } from '../services/matchService';
 import NoMatches from '../components/NoMatches';
 import Loading from '../components/Loading';
 import { MatchProfile } from '../types/MatchProfile';
+import OfflineCard from '../components/OfflineCard';
 
 // Mock data for past matches. this would be the user's matches' full data from MongoDB 
 const mockMatches = [
@@ -120,11 +121,19 @@ const Matches = () => {
   const navigate = useNavigate();
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<MatchProfile | null>(null);
   const [showContact, setShowContact] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
+    if (!navigator.onLine) {
+      setIsOffline(true);
+      setLoading(false);
+      return;
+    }
+    
+
     getMatches(localStorage.getItem('token') || '')
       .then((profiles) => {
         setLoading(false);
@@ -166,7 +175,9 @@ const Matches = () => {
           </div>
 
           {/* Matches Grid */}
-          {loading ? (
+          {isOffline && matches.length === 0 ? (
+            <OfflineCard />
+          ) : loading ? (
             <Loading />
           ) : matches.length === 0 ? (
             <NoMatches isMatch={false} />
