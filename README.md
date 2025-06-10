@@ -2,16 +2,16 @@
 UCLA Roommate Matcher
 
 CS 144 Final Project
+
 Lauren Liu, Aneesh Bonthala, Alexander Chen
 
 ## Overview
-RoomieMatch is a web application that helps UCLA students find compatible roommates based on lifestyle and personality traits. Users will fill out a profile questionnaire (sleep schedule, cleanliness, study habits, social preferences, etc.), and our system will use a K-Nearest Neighbors (KNN) algorithm to find and recommend the most similar profiles. Users can swipe or drag & drop profiles into "Like" and "Dislike" categories. Matches are stored and can be revisited later. It gives you their contact card (phone number, email, etc) if there is a match.
+RoomieMatch is a web application that helps UCLA students find compatible roommates based on lifestyle and personality traits. Users will fill out a profile questionnaire (sleep schedule, cleanliness, study habits, social preferences, etc.), and our system will find and recommend the most similar profiles. Users can swipe or drag & drop profiles into "Like" or "Dislike" categories. Matches are stored and can be revisited later. Users will be given the contact card (phone number, email, etc) for each of their matches.
 
-## Tech Stack
-- MongoDB
-- Express.js
-- React
-- Node.js
-- Redis (for caching)
-- Tailwind CSS
+## Building & Deploying Locally
 
+Fill out the `server/.example_env` file with the proper environment variables. Rename this file to `.env`.
+
+In the `server/` directory, run `npm install` and `npm run dev` to start the server.
+
+In the `client/` directory, run `npm install` and `npm run dev` to host the user interface on `http://localhost:5173`.
