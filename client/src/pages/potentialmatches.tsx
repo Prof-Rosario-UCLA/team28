@@ -175,84 +175,86 @@ const PotentialMatches = () => {
   const currentMatch = potentialMatches[currentMatchIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar isAuthenticated={true} />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            Find Your Perfect Roommate
-          </h1>
-          
-          {/* Drop zones and card container */}
-          <div className="flex items-center justify-between mb-12 px-4" onClick={() => handleNotInterested()}>
-            <div
-              id="reject-zone"
-              className="w-1/4 h-48 bg-red-500/20 rounded-2xl border-2 border-red-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-red-500/30"
-            >
-              <div className="text-center p-6">
-                <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <span className="text-red-500 font-bold text-xl">Not Interested</span>
+      <div className="flex-1 overflow-auto">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Find Your Perfect Roommate
+            </h1>
+            
+            {/* Drop zones and card container */}
+            <div className="flex items-center justify-between mb-12 px-4" onClick={() => handleNotInterested()}>
+              <div
+                id="reject-zone"
+                className="w-1/4 h-48 bg-red-500/20 rounded-2xl border-2 border-red-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-red-500/30"
+              >
+                <div className="text-center p-6">
+                  <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span className="text-red-500 font-bold text-xl">Not Interested</span>
+                </div>
               </div>
-            </div>
 
-            {/* Current potential match card */}
-            <div
-              draggable
-              onDragStart={handleDragStart}
-              onDrag={handleDrag}
-              onDragEnd={handleDragEnd}
-              className={`w-1/3 bg-gray-800/50 rounded-2xl p-8 backdrop-blur-sm border border-gray-700 cursor-move shadow-lg mx-12
-                ${isDragging ? 'opacity-50' : 'hover:shadow-xl transition-all duration-300 hover:border-blue-500'}`}
-              style={{
-                transform: isDragging ? `translate(${dragPosition.x}px, ${dragPosition.y}px)` : 'none'
-              }}
-              onClick={() => setShowProfile(true)}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="mb-6">
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-3xl font-bold">
-                    {currentMatch.name[0]}{currentMatch.name[1]}
+              {/* Current potential match card */}
+              <div
+                draggable
+                onDragStart={handleDragStart}
+                onDrag={handleDrag}
+                onDragEnd={handleDragEnd}
+                className={`w-1/3 bg-gray-800/50 rounded-2xl p-8 backdrop-blur-sm border border-gray-700 cursor-move shadow-lg mx-12
+                  ${isDragging ? 'opacity-50' : 'hover:shadow-xl transition-all duration-300 hover:border-blue-500'}`}
+                style={{
+                  transform: isDragging ? `translate(${dragPosition.x}px, ${dragPosition.y}px)` : 'none'
+                }}
+                onClick={() => setShowProfile(true)}
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-6">
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-3xl font-bold">
+                      {currentMatch.name[0]}{currentMatch.name[1]}
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">{currentMatch.name}</h2>
+                  <p className="text-gray-300 text-lg mb-1">{currentMatch.profile.occupation}</p>
+                  <p className="text-gray-400">{currentMatch.profile.location}</p>
+                  <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                    {currentMatch.profile.interests.slice(0, 3).map((interest) => (
+                      <span
+                        key={interest}
+                        className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm"
+                      >
+                        {interest}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-4 text-sm text-gray-400">
+                    Match Score: {(currentMatch.similarity * 100).toFixed(1)}%
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{currentMatch.name}</h2>
-                <p className="text-gray-300 text-lg mb-1">{currentMatch.profile.occupation}</p>
-                <p className="text-gray-400">{currentMatch.profile.location}</p>
-                <div className="mt-4 flex flex-wrap gap-2 justify-center">
-                  {currentMatch.profile.interests.slice(0, 3).map((interest) => (
-                    <span
-                      key={interest}
-                      className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm"
-                    >
-                      {interest}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 text-sm text-gray-400">
-                  Match Score: {(currentMatch.similarity * 100).toFixed(1)}%
+              </div>
+
+              <div
+                id="accept-zone"
+                className="w-1/4 h-48 bg-green-500/20 rounded-2xl border-2 border-green-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-green-500/30"
+              >
+                <div className="text-center p-6" onClick={() => handleLike(currentMatch._id)}>
+                  <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-green-500 font-bold text-xl">Interested</span>
                 </div>
               </div>
             </div>
 
-            <div
-              id="accept-zone"
-              className="w-1/4 h-48 bg-green-500/20 rounded-2xl border-2 border-green-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-green-500/30"
-            >
-              <div className="text-center p-6" onClick={() => handleLike(currentMatch._id)}>
-                <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-green-500 font-bold text-xl">Interested</span>
-              </div>
+            {/* Instructions */}
+            <div className="mt-16 text-center">
+              <p className="text-gray-300 text-xl mb-3 font-medium">Drag the card left to reject, or right to accept!</p>
+              <p className="text-gray-400">You can click the card to view full profile</p>
             </div>
-          </div>
-
-          {/* Instructions */}
-          <div className="mt-16 text-center">
-            <p className="text-gray-300 text-xl mb-3 font-medium">Drag the card left to reject, or right to accept!</p>
-            <p className="text-gray-400">You can click the card to view full profile</p>
           </div>
         </div>
       </div>

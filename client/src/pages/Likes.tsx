@@ -169,36 +169,38 @@ const Likes = () => {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar 
         isAuthenticated={true} 
       />
-      
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Your Match History</h1>
-          </div>
 
-          {/* Matches Grid */}
-          {isOffline && likes.length === 0 ? (
-            <OfflineCard />
-          ) : loading ? (
-            <Loading />
-          ) : likes.length === 0 ? (
-            <NoMatches isMatch={false} />
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {likes.map((match) => (
-                <MatchCard
-                  key={match.id}
-                  match={match}
-                  onViewProfile={handleViewProfile}
-                />
-              ))}
+      <div className="flex-1 overflow-auto">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold mb-2">Your Match History</h1>
             </div>
-          )}
+
+            {/* Matches Grid */}
+            {isOffline && likes.length === 0 ? (
+              <OfflineCard />
+            ) : loading ? (
+              <Loading />
+            ) : likes.length === 0 ? (
+              <NoMatches isMatch={false} />
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {likes.map((match) => (
+                  <MatchCard
+                    key={match.id}
+                    match={match}
+                    onViewProfile={handleViewProfile}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

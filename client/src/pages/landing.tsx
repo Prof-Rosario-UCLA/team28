@@ -68,32 +68,34 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar isAuthenticated={isAuthenticated} />
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-20">
-        <div className="text-center mb-20">
-          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
-            Find Your Perfect Roommate
-          </h1>
-          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-            Match with compatible roommates based on lifestyle, preferences, and more. 
-            Join thousands of people finding their ideal living situation.
-          </p>
-          <div className="space-x-6">
-            <button 
-              onClick={() => setShowSignupForm(true)}
-              className="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg"
-            >
-              Sign Up
-            </button>
-            <button 
-              onClick={() => setShowLoginForm(true)}
-              className="bg-transparent text-white px-8 py-4 rounded-lg font-semibold border-2 border-blue-500 hover:bg-blue-500/10 transition-all"
-            >
-              Log In
-            </button>
+      <div className="flex-1 overflow-auto">
+        <div className="container mx-auto px-4 py-20">
+          <div className="text-center mb-20">
+            <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+              Find Your Perfect Roommate
+            </h1>
+            <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+              Match with compatible roommates based on lifestyle, preferences, and more. 
+              Join thousands of people finding their ideal living situation.
+            </p>
+            <div className="space-x-6">
+              <button 
+                onClick={() => setShowSignupForm(true)}
+                className="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Sign Up
+              </button>
+              <button 
+                onClick={() => setShowLoginForm(true)}
+                className="bg-transparent text-white px-8 py-4 rounded-lg font-semibold border-2 border-blue-500 hover:bg-blue-500/10 transition-all"
+              >
+                Log In
+              </button>
+            </div>
           </div>
         </div>
 
