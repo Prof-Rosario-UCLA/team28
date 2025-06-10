@@ -10,8 +10,14 @@ RoomieMatch is a web application that helps UCLA students find compatible roomma
 
 ## Building & Deploying Locally
 
+### Server
+
 Fill out the `server/.example_env` file with the proper environment variables. Rename this file to `.env`.
 
 In the `server/` directory, run `npm install` and `npm run dev` to start the server.
+
+### Client
+
+Fill out the `client/.example_env` file with the proper environment variables. Rename this file to `.env`.
 
 In the `client/` directory, run `npm install` and `npm run dev` to host the user interface on `http://localhost:5173`.
