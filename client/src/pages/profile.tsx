@@ -38,10 +38,57 @@ const Profile = () => {
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
   const [genBioClicked, setGenBioClicked] = useState(false);
 
-  const handleGenBioClicked = () => {
-    setGenBioClicked(true);
-    // trigger bio generation logic here...
-  };
+// AI Generate Bio Function
+const handleGenBioClicked = async () => {
+  setGenBioClicked(true);
+  try {
+    const prompt = `Write a short, friendly roommate bio with the following info:\n
+      Full Name: ${profileData?.fullName}\n
+      Age: ${profileData?.age}\n
+      Occupation: ${profileData?.occupation}\n
+      Location: ${profileData?.location}\n
+      Interests: ${profileData?.interests.join(', ')}\n
+      Smoking: ${profileData?.smoking}\n
+      Pets: ${profileData?.pets}\n
+      Cleanliness: ${profileData?.cleanliness}\n
+      Noise Level: ${profileData?.noiseLevel}\n
+      Work Schedule: ${profileData?.workSchedule}\n
+      Guests: ${profileData?.guests}\n
+      Additional Notes: ${profileData?.additionalNotes}\n`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${import.meta.env.VITE_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Gemini API error: ${response.status} - ${errorText}`);
+      throw new Error(`Gemini API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const output =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      'No bio could be generated.';
+    setProfileData(prev => prev ? { ...prev, bio: output } : null);
+  } catch (error) {
+    console.error('Error generating bio:', error);
+  }
+};
+
 
   // Fetch profile data from MongoDB
   useEffect(() => {
@@ -143,7 +190,16 @@ const Profile = () => {
       }
 
       const data = await response.json();
-      setProfileData(data.profile);
+      setProfileData(prev =>
+        prev
+          ? {
+              ...prev,
+              ...data.profile,
+              fullName: prev.fullName,
+              createdAt: prev.createdAt
+            }
+          : data.profile
+      );
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
