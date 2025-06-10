@@ -36,6 +36,12 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
+  const [genBioClicked, setGenBioClicked] = useState(false);
+
+  const handleGenBioClicked = () => {
+    setGenBioClicked(true);
+    // trigger bio generation logic here...
+  };
 
   // Fetch profile data from MongoDB
   useEffect(() => {
@@ -259,6 +265,16 @@ const Profile = () => {
                         rows={4}
                         className={commonInputClasses}
                       />
+                      <button
+                        onClick={handleGenBioClicked}
+                        className={`px-4 py-2 rounded-full transition-colors ${
+                          genBioClicked
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        }`}
+                      >
+                        AI Generate Bio
+                      </button>
                     </div>
                   ) : (
                     <p className="text-gray-300">{profileData.bio}</p>
