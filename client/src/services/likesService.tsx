@@ -15,6 +15,8 @@ export async function sendLike(likedUserId, token) {
 
 //get who liked you
 export async function getLikes(token) {
+  const url = `/api/like/liked-me`;
+  console.log('Full URL would be:', window.location.origin + url);
   const res = await fetch(`/api/like/liked-me`, {
     method: 'GET',
     headers: {

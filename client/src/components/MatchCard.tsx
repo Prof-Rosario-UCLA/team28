@@ -1,6 +1,6 @@
 import React from 'react';
 // Use a relative URL to the public directory for the default profile image
-const defaultProfile = '../../public/defaultProfile.jpg';
+const defaultProfile = '/defaultProfile.jpg';
 
 interface MatchCardProps {
   match: {
