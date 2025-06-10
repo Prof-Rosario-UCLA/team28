@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MatchCard from '../components/MatchCard';
-import { getMatches } from '../services/matchService';
+import {sendLike, getLikes} from '../services/likesService';
 import NoMatches from '../components/NoMatches';
 import Loading from '../components/Loading';
 import { MatchProfile } from '../types/MatchProfile';
@@ -116,23 +116,23 @@ const mockMatches = [
   }
 ];
 
-const Matches = () => {
+const Likes = () => {
   const navigate = useNavigate();
-  const [matches, setMatches] = useState<any[]>([]);
+  const [likes, setLikes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState<MatchProfile | null>(null);
   const [showContact, setShowContact] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
-    getMatches(localStorage.getItem('token') || '')
+    getLikes(localStorage.getItem('token') || '')
       .then((profiles) => {
         setLoading(false);
-        console.log("Loaded matches:", profiles);
-        setMatches(profiles);
+        console.log("Loaded likes:", profiles);
+        setLikes(profiles);
       })
       .catch((err) => {
-        console.error("Error loading matches:", err);
+        console.error("Error loading likes:", err);
       });
   }, []);
 
@@ -150,7 +150,16 @@ const Matches = () => {
     setShowProfile(true);
   };
 
-  //when matching with someone who likes you, sendLike matches if other person has already liked yo
+  //when matching with someone who likes you, sendLike matches if other person has already liked you
+  const handleMatch = (matchedName : string, likedUserId : string) => {
+    sendLike(likedUserId, localStorage.getItem('token') || '')
+      .then(() => {
+        alert('You have successfully matched with ' + matchedName);
+        setShowProfile(false);
+        setSelectedMatch(null);
+      })
+      setLikes((prevLikes) => prevLikes.filter((match) => match._id !== likedUserId));
+  }
 
   return (
     <div className="h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -168,11 +177,11 @@ const Matches = () => {
           {/* Matches Grid */}
           {loading ? (
             <Loading />
-          ) : matches.length === 0 ? (
+          ) : likes.length === 0 ? (
             <NoMatches isMatch={false} />
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {matches.map((match) => (
+              {likes.map((match) => (
                 <MatchCard
                   key={match.id}
                   match={match}
@@ -332,6 +341,14 @@ const Matches = () => {
               <div className="flex justify-end space-x-4 pt-6">
                 <button
                   onClick={() => {
+                    handleMatch( selectedMatch.name.toString() , selectedMatch._id.toString())
+                  }}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                    Match
+                </button>
+                <button
+                  onClick={() => {
                     setShowProfile(false);
                     setShowContact(true);
                   }}
@@ -354,4 +371,4 @@ const Matches = () => {
   );
 };
 
-export default Matches; 
+export default Likes;

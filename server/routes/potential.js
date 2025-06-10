@@ -3,12 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Match = require('../models/Match');
 const auth = require('../middleware/auth');
 const { getUserVector, searchSimilarUsers } = require('../utils/qdrantUtils');
 
 // get potential matches for a user
 router.get('/', auth, async (req, res) => {
   try {
+    console.log('1. Getting potential matches for user:', req.user.userId);
     // 1. Get similar users from Qdrant
     const qdrantId = parseInt(req.user.userId.toString().slice(-6), 16); // convert MongoDB ObjectId to numeric ID for Qdrant
     const similarUsers = await searchSimilarUsers(qdrantId, 20);
@@ -29,10 +31,22 @@ router.get('/', auth, async (req, res) => {
       }))
       .sort((a, b) => b.similarity - a.similarity);
 
-    // TODO: add a filter to exclude users that are already in the user's matches
+    // filter to exclude users that are already in the user's matches
+    const myMatchesDocs = await Match.find({ users: req.user.userId }).select('users');
+    const matchedUserIds = myMatchesDocs.flatMap(match => 
+      match.users
+        .filter(userId => userId.toString() !== req.user.userId.toString())
+        .map(userId => userId.toString())
+    );
+
+    const filteredPotentialMatches = potentialMatches.filter(user => 
+      !matchedUserIds.includes(user._id.toString())
+    );
+    
+
     // TODO: display similarity score on the frontend
 
-    res.json(potentialMatches);
+    res.json(filteredPotentialMatches);
   } catch (error) {
     console.error('Error getting potential matches:', error);
     res.status(500).json({ message: 'Error getting potential matches', error: error.message });

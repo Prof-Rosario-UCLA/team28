@@ -8,19 +8,26 @@ const matchSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   }],
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  createdAt:  { type: Date, default: Date.now },
 });
 
-// Ensure users array always has exactly 2 users (the ones who matched)
-matchSchema.pre('save', function(next) {
+// Validate & sort the two IDs to enforce order
+matchSchema.pre('validate', function(next) {
   if (this.users.length !== 2) {
-    next(new Error('Match must have exactly 2 users'));
+    return next(new Error('Match must have exactly 2 users'));
   }
+  this.users = this.users
+    .map(id => id.toString())
+    .sort()
+    .map(id => new mongoose.Types.ObjectId(id));
   next();
 });
+
+// Unique compound index so A–B and B–A can’t both exist
+matchSchema.index(
+  { 'users.0': 1, 'users.1': 1 },
+  { unique: true }
+);
 
 // Index for faster queries
 matchSchema.index({ users: 1 });

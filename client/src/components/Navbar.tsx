@@ -52,6 +52,7 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
             <>
               <Link to="/potential-matches" className="text-gray-300 hover:text-white transition-colors">Find Matches</Link>
               <Link to="/matches" className="text-gray-300 hover:text-white transition-colors">My Matches</Link>
+              <Link to="/likes" className="text-gray-300 hover:text-white transition-colors">Likes</Link>
               <Link to="/profile" className="text-gray-300 hover:text-white transition-colors">Profile</Link>
               <button 
                 onClick={handleLogout}

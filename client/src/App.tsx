@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Landing from './pages/Landing';
 import Profile from './pages/Profile';
 import Matches from './pages/Matches';
+import Likes from './pages/Likes';
 import PotentialMatches from './pages/PotentialMatches';
 import OnboardingForm from './components/OnboardingForm';
 import CookieConsent from './components/CookieConsent';
@@ -98,6 +99,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <PotentialMatches />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/likes"
+            element={
+              <ProtectedRoute>
+                <Likes />
               </ProtectedRoute>
             }
           />

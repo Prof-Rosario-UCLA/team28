@@ -20,6 +20,7 @@ const matchRoutes = require('./routes/matches');
 const userRoutes = require('./routes/profile');
 const authRoutes = require('./routes/auth');
 const potentialRoutes = require('./routes/potential');
+const likeRoutes = require('./routes/like'); 
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/api/matches', matchRoutes);
 app.use('/api/profile', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/potential', potentialRoutes);
+app.use('/api/like', likeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
