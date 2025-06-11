@@ -5,30 +5,32 @@ steps:
   # Build client
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'build', 
+      'build',
       '-t', 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9',
-      './client'
+      '-f', 'client/Dockerfile',
+      'client'
     ]
 
   # Push client image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'push', 
+      'push',
       'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9'
     ]
 
   # Build server
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'build', 
+      'build',
       '-t', 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5',
-      './server'
+      '-f', 'server/Dockerfile',
+      'server'
     ]
 
   # Push server image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'push', 
+      'push',
       'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5'
     ]
 
