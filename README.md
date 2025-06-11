@@ -34,7 +34,7 @@ docker push us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28
 # 3. change version number in server-deployment.yaml image name
 
 # 4. Apply deployment to GKE
-kubectl apply -f server-deployment.yaml
+kubectl apply -f k8s/server-deployment.yaml
 ```
 
 If changes are made to the `client/`, run the following commands to redeploy:
@@ -53,7 +53,7 @@ docker push us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28
 # 3. change version number in client-deployment.yaml image name
 
 # 4. Apply deployment to GKE
-kubectl apply -f client-deployment.yaml
+kubectl apply -f k8s/client-deployment.yaml
 ```
 
 Sanity-check that the deployment is running:
