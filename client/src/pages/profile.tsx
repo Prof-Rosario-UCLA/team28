@@ -244,39 +244,53 @@ const handleGenBioClicked = async () => {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      <Navbar isAuthenticated={true} />
-      
-      <div className="flex-1 overflow-auto">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-5xl mx-auto">
-            {/* Header with Edit Button */}
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                My Profile
-              </h1>
+    <Navbar isAuthenticated={true} />
+    
+    {/* Fixed Header */}
+    <div className="flex-shrink-0 px-4 py-6">
+      <div className="container mx-auto max-w-5xl">
+        <div className="flex justify-between items-center">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            My Profile
+          </h1>
+          {isEditing ? (
+            <div className="flex items-center gap-4">
               <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+                onClick={() => setIsEditing(false)}
+                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
               >
-                {isEditing ? (
-                  <>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Cancel
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Edit Profile
-                  </>
-                )}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Save Changes
               </button>
             </div>
-          </div>
-
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+              Edit Profile
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+    <div className={`flex-1 overflow-auto `}>
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto"></div>
           {/* Main Profile Container */}
           <div className="bg-gray-800/50 rounded-3xl p-8 backdrop-blur-sm border border-gray-700 shadow-xl">
             {/* Profile Header */}
@@ -706,29 +720,6 @@ const handleGenBioClicked = async () => {
               </div>
             </div>
           </div>
-
-          {/* Edit Mode Actions */}
-          {isEditing && (
-            <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 p-4">
-              <div className="container mx-auto max-w-5xl flex justify-end space-x-4">
-                <button
-                  onClick={handleCancel}
-                  className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center gap-2"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
