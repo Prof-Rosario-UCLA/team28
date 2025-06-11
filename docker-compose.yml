@@ -28,7 +28,7 @@ services:
       - ./client/.env
     environment:
       - NODE_ENV=development
-      - DOCKER=true
+      - VITE_DOCKER=true
 
   redis:
     image: redis:7

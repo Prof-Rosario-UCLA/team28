@@ -20,6 +20,6 @@ In the `server/` directory, run `npm install`. In another terminal, run `redis-s
 
 In the `client/` directory, run `npm install` and `npm run dev` to host the user interface on `http://localhost:5173`.
 
-## Docker
+### Docker
 
 At the root project directory, run `docker compose up --build`.

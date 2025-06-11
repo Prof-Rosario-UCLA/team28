@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: team28-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: team28-client
+  template:
+    metadata:
+      labels:
+        app: team28-client
+    spec:
+      containers:
+      - name: team28-client
+        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v1
+        ports:
+        - containerPort: 5173
+        env:
+        - name: VITE_DOCKER
+          value: "true"
+        - name: VITE_API_KEY
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: team28-client
+spec:
+  selector:
+    app: team28-client
+  ports:
+  - port: 80
+    targetPort: 5173
+  type: LoadBalancer
