@@ -24,7 +24,7 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
       if (!token) return;
 
       // verify token + get user profile
-      const response = await fetch('http://localhost:3000/api/profile/me', {
+      const response = await fetch('/api/profile/me', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

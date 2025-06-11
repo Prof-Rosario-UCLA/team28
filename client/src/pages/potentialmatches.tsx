@@ -50,7 +50,7 @@ const PotentialMatches = () => {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/api/potential', {
+        const response = await fetch('/api/potential', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

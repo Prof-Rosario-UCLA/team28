@@ -7,9 +7,10 @@ export default defineConfig({
     postcss: './postcss.config.cjs',
   },
   server: {
+    host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://server:3000',
         changeOrigin: true,
         secure: false,
       },
