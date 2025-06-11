@@ -1,2 +1,2 @@
 VITE_API_KEY=
-DOCKER=false
+VITE_DOCKER=false

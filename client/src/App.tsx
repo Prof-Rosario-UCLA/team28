@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Landing from './pages/Landing';
-import Profile from './pages/Profile';
+import Landing from './pages/landing';
+import Profile from './pages/profile';
 import Matches from './pages/Matches';
 import Likes from './pages/Likes';
-import PotentialMatches from './pages/PotentialMatches';
+import PotentialMatches from './pages/potentialmatches';
 import OnboardingForm from './components/OnboardingForm';
 import CookieConsent from './components/CookieConsent';
-import About from './pages/about';
+import About from './pages/About';
 
 
 const App = () => {

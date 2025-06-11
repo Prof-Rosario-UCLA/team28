@@ -3,7 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react';
 import fs from 'fs';
 
-const isDocker = process.env.DOCKER === 'true';
+const isDocker = process.env.VITE_DOCKER === 'true';
 
 export default defineConfig({
   plugins: [react(),

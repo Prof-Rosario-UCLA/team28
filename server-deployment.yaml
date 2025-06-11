@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: team28-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: team28-server
+  template:
+    metadata:
+      labels:
+        app: team28-server
+    spec:
+      containers:
+      - name: team28-server
+        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REDIS_URL
+          value: redis://redis:6379
+        - name: QDRANT_COLLECTION_NAME
+          value: roommate_profiles
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: team28-secrets
+              key: MONGODB_URI
+        - name: QDRANT_URL
+          valueFrom:
+            secretKeyRef:
+              name: team28-secrets
+              key: QDRANT_URL
+        - name: QDRANT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: team28-secrets
+              key: QDRANT_API_KEY
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: team28-secrets
+              key: JWT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: team28-server
+spec:
+  selector:
+    app: team28-server
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
