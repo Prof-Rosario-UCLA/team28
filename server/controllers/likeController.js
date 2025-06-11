@@ -1,5 +1,7 @@
 const Match = require('../models/Match');
 const Like = require('../models/Like');
+const matchController = require('./matchController');
+const { getSimilarityBetweenUsers } = require('../utils/qdrantUtils'); 
 
 const likeController = {
   // Get users who liked me
@@ -10,12 +12,15 @@ const likeController = {
       const likes = await Like.find({ liked: me })
         .populate('liker', 'name profile');
 
-      const users = likes.map(({ liker }) => {
+      const users = likes.map((like) => {
+        const { liker, matchScore } = like;
         const { _id, name, profile } = liker;
+        console.log(matchScore);
         return {
           _id,
           name,
-          ...profile  // flatten
+          ...profile,  // flatten profile fields
+          matchScore: matchScore || 0 
         };
       });
 
@@ -46,15 +51,15 @@ const likeController = {
       // Check for reciprocal like and Match if so
       const reciprocal = await Like.findOne({ liker: likedUserId, liked: likerId });
       if (reciprocal) {
-        const match = new Match({ users: [likerId, likedUserId] });
-        await match.save();
-        // delete the reciprocal like
+        const match = await matchController.createMatch(likerId, likedUserId);
         await Like.deleteOne({ liker: likedUserId, liked: likerId });
         return res.status(201).json({ message: 'Match created', match });
       }
 
       // Else, create like
-      const newLike = new Like({ liker: likerId, liked: likedUserId });
+      const matchScore = await getSimilarityBetweenUsers(likerId, likedUserId)
+      console.log(`Match score between ${likerId} and ${likedUserId}: ${matchScore}`);
+      const newLike = new Like({ liker: likerId, liked: likedUserId , matchScore : matchScore });
       await newLike.save();
       res.status(201).json(newLike);
 

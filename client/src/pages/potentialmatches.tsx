@@ -83,6 +83,11 @@ const PotentialMatches = () => {
       })
       .catch((err) => {
         console.error("Error liking:", err);
+        if (err.message === 'You have already liked this user') {
+          if (currentMatchIndex < potentialMatches.length - 1) {
+            setCurrentMatchIndex(prev => prev + 1);
+          }
+        }
       });
   };
 
@@ -186,10 +191,11 @@ const PotentialMatches = () => {
             </h1>
             
             {/* Drop zones and card container */}
-            <div className="flex items-center justify-between mb-12 px-4" onClick={() => handleNotInterested()}>
+            <div className="flex items-center justify-between mb-12 px-4" >
               <div
                 id="reject-zone"
                 className="w-1/4 h-48 bg-red-500/20 rounded-2xl border-2 border-red-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-red-500/30"
+                onClick={() => handleNotInterested()}
               >
                 <div className="text-center p-6">
                   <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -240,8 +246,9 @@ const PotentialMatches = () => {
               <div
                 id="accept-zone"
                 className="w-1/4 h-48 bg-green-500/20 rounded-2xl border-2 border-green-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-green-500/30"
+                onClick={() => handleLike(currentMatch._id)}
               >
-                <div className="text-center p-6" onClick={() => handleLike(currentMatch._id)}>
+                <div className="text-center p-6" >
                   <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>

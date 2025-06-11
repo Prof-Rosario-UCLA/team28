@@ -13,10 +13,12 @@ const likeSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  matchScore: { type: Number, default: 0 }
 });
 
 //Prevent duplicate “A likes B” docs
 likeSchema.index({ liker: 1, liked: 1 }, { unique: true });
 //index for seeing who liked me
 likeSchema.index({ liked: 1 });
+
 module.exports = mongoose.model('Like', likeSchema);

@@ -1,6 +1,13 @@
 const Match = require('../models/Match');
+const { getSimilarityBetweenUsers } = require('../utils/qdrantUtils'); 
 
 const matchController = {
+  createMatch: async (userId1, userId2) => {
+    const similarityScore = await getSimilarityBetweenUsers(userId1, userId2);
+    const match = new Match({ users: [userId1, userId2], matchScore: similarityScore });
+    await match.save();
+    return match;
+  },
   // Get all matches for current user
   getMyMatches: async (req, res) => {
     try {
@@ -21,7 +28,8 @@ const matchController = {
             return {
               _id,
               name,
-              ...profile // flatten profile fields
+              ...profile, // flatten profile fields
+              matchScore: match.matchScore || 0
             };
           })
       );

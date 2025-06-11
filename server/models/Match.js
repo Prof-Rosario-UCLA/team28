@@ -9,6 +9,7 @@ const matchSchema = new mongoose.Schema({
     required: true
   }],
   createdAt:  { type: Date, default: Date.now },
+  matchScore: { type: Number, default: 0 }
 });
 
 // Validate & sort the two IDs to enforce order
@@ -32,5 +33,7 @@ matchSchema.index(
 // Index for faster queries
 matchSchema.index({ users: 1 });
 matchSchema.index({ createdAt: -1 });
+// Index for match score
+matchSchema.index({ matchScore: -1 });
 
 module.exports = mongoose.model('Match', matchSchema); 

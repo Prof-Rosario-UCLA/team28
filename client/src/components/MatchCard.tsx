@@ -43,7 +43,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onViewProfile }) => {
         </div>
         <div className="ml-auto">
           <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">
-            {match.matchScore}% Match
+            {(match.matchScore * 100).toFixed(1)}% Match
           </span>
         </div>
       </div>

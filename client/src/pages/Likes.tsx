@@ -7,6 +7,7 @@ import NoMatches from '../components/NoMatches';
 import Loading from '../components/Loading';
 import { MatchProfile } from '../types/MatchProfile';
 import OfflineCard from '../components/OfflineCard';
+import DefaultProfile from '/defaultProfile.jpg';
 
 // Mock data for past matches. this would be the user's matches' full data from MongoDB 
 const mockMatches = [
@@ -264,7 +265,7 @@ const Likes = () => {
 
             <div className="flex items-center space-x-6 mb-8">
               <img
-                src={selectedMatch.image}
+                src={selectedMatch.image || DefaultProfile}
                 alt={selectedMatch.name}
                 className="w-24 h-24 rounded-full object-cover"
               />

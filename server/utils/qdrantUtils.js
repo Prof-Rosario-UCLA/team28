@@ -74,5 +74,43 @@ async function searchSimilarUsers(userId, limit = 20) {
     throw error;
   }
 }
+function cosineSimilarity(vecA, vecB) {
+  if (vecA.length !== vecB.length) {
+    throw new Error('Vectors must have the same length');
+  }
+  
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+//This is stupid but Qdrant doens't ahve direct support for calculating similarity between two users
+async function getSimilarityBetweenUsers(mongoId1, mongoId2) {
+  try {
+    const qdrantId1 = parseInt(mongoId1.toString().slice(-6), 16);
+    const qdrantId2 = parseInt(mongoId2.toString().slice(-6), 16);
+    
+    const vector1 = await getUserVector(qdrantId1);
+    const vector2 = await getUserVector(qdrantId2);
+    
+    if (!vector1 || !vector2) {
+      console.log('One or both vectors not found');
+      return 0;
+    }
+    
+    const similarity = cosineSimilarity(vector1, vector2);
+    return similarity;
+  } catch (error) {
+    console.error('Error calculating direct similarity:', error);
+    return 0;
+  }
+}
 
-module.exports = { upsertProfileVector, encodeVector, getUserVector, searchSimilarUsers };
+module.exports = { upsertProfileVector, encodeVector, getUserVector, searchSimilarUsers, getSimilarityBetweenUsers };
