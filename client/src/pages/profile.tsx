@@ -247,44 +247,48 @@ const handleGenBioClicked = async () => {
     <Navbar isAuthenticated={true} />
     
     {/* Fixed Header */}
-    <div className="flex-shrink-0 px-4 py-6">
-      <div className="container mx-auto max-w-5xl">
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            My Profile
-          </h1>
-          {isEditing ? (
-            <div className="flex items-center gap-4">
+    <div className="flex-shrink-0 px-4 pt-0 pb-2 sm:px-4 sm:pt-6 sm:pb-4">
+      <div className="container mx-auto">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              My Profile
+            </h1>
+            {isEditing ? (
+              <div className="flex items-center gap-2 sm:gap-4">
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-3 py-2 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                >
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span className="inline">Cancel</span>
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="px-3 py-2 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                >
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="hidden sm:inline">Save Changes</span>
+                  <span className="sm:hidden">Save</span>
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={() => setIsEditing(false)}
-                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+                onClick={() => setIsEditing(true)}
+                className="px-3 py-2 sm:px-6 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
-                Cancel
+                <span className="hidden sm:inline">Edit Profile</span>
+                <span className="sm:hidden">Edit</span>
               </button>
-              <button
-                onClick={handleSave}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                Save Changes
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-              Edit Profile
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -292,19 +296,19 @@ const handleGenBioClicked = async () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-5xl mx-auto"></div>
           {/* Main Profile Container */}
-          <div className="bg-gray-800/50 rounded-3xl p-8 backdrop-blur-sm border border-gray-700 shadow-xl">
+          <div className="bg-gray-800/50 rounded-3xl p-4 sm:p-8 backdrop-blur-sm border border-gray-700 shadow-xl">
             {/* Profile Header */}
-            <div className="flex items-center space-x-6 mb-8 pb-8 border-b border-gray-700">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-3xl font-bold shadow-lg">
+            <div className="flex items-center space-x-4 sm:space-x-6 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-700">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-lg sm:text-3xl font-bold shadow-lg">
                 {profileData.fullName?.[0]}{profileData.fullName?.[1]}
               </div>
               <div className="flex-grow">
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-4">
                   <div>
-                    <h1 className="text-3xl font-bold mb-2">{profileData.fullName}</h1>
-                    <p className="text-gray-400">{profileData.occupation}</p>
-                    <p className="text-gray-400">{profileData.location}</p>
-                    <p className="text-gray-400 text-sm mt-2">
+                    <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">{profileData.fullName}</h1>
+                    <p className="text-gray-400 text-sm sm:text-base">{profileData.occupation}</p>
+                    <p className="text-gray-400 text-sm sm:text-base">{profileData.location}</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
                       Member since {new Date(profileData.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -313,13 +317,13 @@ const handleGenBioClicked = async () => {
             </div>
 
             {/* Main Content Grid */}
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
               {/* Left Column */}
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {/* About Me */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     About Me
@@ -337,7 +341,7 @@ const handleGenBioClicked = async () => {
                       />
                       <button
                         onClick={handleGenBioClicked}
-                        className={`px-4 py-2 rounded-full transition-colors ${
+                        className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full transition-colors text-sm sm:text-base ${
                           genBioClicked
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -347,19 +351,19 @@ const handleGenBioClicked = async () => {
                       </button>
                     </div>
                   ) : (
-                    <p className="text-gray-300">{profileData.bio}</p>
+                    <p className="text-gray-300 text-sm sm:text-base">{profileData.bio}</p>
                   )}
                 </div>
 
                 {/* Living Preferences */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Living Preferences
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {isEditing ? (
                       <>
                         <div>
@@ -417,20 +421,20 @@ const handleGenBioClicked = async () => {
                     ) : (
                       <>
                         <div>
-                          <p className="text-gray-400 text-sm">Budget</p>
-                          <p className="text-white">{profileData.budget}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Budget</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.budget}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Preferred Location</p>
-                          <p className="text-white">{profileData.preferredLocation}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Preferred Location</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.preferredLocation}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Room Type</p>
-                          <p className="text-white capitalize">{profileData.roomType}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Room Type</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.roomType}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Lease Length</p>
-                          <p className="text-white">{profileData.leaseLength}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Lease Length</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.leaseLength}</p>
                         </div>
                       </>
                     )}
@@ -438,14 +442,14 @@ const handleGenBioClicked = async () => {
                 </div>
 
                 {/* Contact Information */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     Contact Information
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {isEditing ? (
                       <>
                         <div>
@@ -486,16 +490,16 @@ const handleGenBioClicked = async () => {
                     ) : (
                       <>
                         <div>
-                          <p className="text-gray-400 text-sm">Email</p>
-                          <p className="text-white">{profileData.contact.email}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Email</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.contact.email}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Phone</p>
-                          <p className="text-white">{profileData.contact.phone}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Phone</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.contact.phone}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Instagram</p>
-                          <p className="text-white">{profileData.contact.instagram}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Instagram</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.contact.instagram}</p>
                         </div>
                       </>
                     )}
@@ -503,12 +507,12 @@ const handleGenBioClicked = async () => {
                 </div>
 
                 {/* Additional Notes */}
-                <div className="mb-6">
-                  <label className="block text-gray-300 mb-2">Additional Notes</label>
+                <div className="mb-4 sm:mb-6">
+                  <label className="block text-gray-300 mb-2 text-sm sm:text-base">Additional Notes</label>
                   <textarea
                     value={profileData.additionalNotes}
                     onChange={(e) => setProfileData(prev => prev ? { ...prev, additionalNotes: e.target.value } : null)}
-                    className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white text-sm sm:text-base"
                     rows={4}
                     placeholder="Share any additional preferences or requirements for your ideal roommate..."
                     disabled={!isEditing}
@@ -531,16 +535,16 @@ const handleGenBioClicked = async () => {
               </div>
 
               {/* Right Column */}
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {/* Lifestyle */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Lifestyle
                   </h2>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     {isEditing ? (
                       <>
                         <div>
@@ -603,20 +607,20 @@ const handleGenBioClicked = async () => {
                     ) : (
                       <>
                         <div>
-                          <p className="text-gray-400 text-sm">Smoking</p>
-                          <p className="text-white capitalize">{profileData.smoking}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Smoking</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.smoking}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Pets</p>
-                          <p className="text-white capitalize">{profileData.pets}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Pets</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.pets}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Cleanliness</p>
-                          <p className="text-white capitalize">{profileData.cleanliness}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Cleanliness</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.cleanliness}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Noise Level</p>
-                          <p className="text-white capitalize">{profileData.noiseLevel}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Noise Level</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.noiseLevel}</p>
                         </div>
                       </>
                     )}
@@ -624,21 +628,21 @@ const handleGenBioClicked = async () => {
                 </div>
 
                 {/* Interests */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                     </svg>
                     Interests
                   </h2>
                   {isEditing ? (
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <div className="flex flex-wrap gap-2">
                         {['Reading', 'Gaming', 'Cooking', 'Sports', 'Music', 'Travel', 'Art', 'Movies', 'Fitness', 'Photography'].map((interest) => (
                           <button
                             key={interest}
                             onClick={() => handleInterestsChange(interest)}
-                            className={`px-4 py-2 rounded-full transition-colors ${
+                            className={`px-3 py-1 sm:px-4 sm:py-2 rounded-full transition-colors text-sm sm:text-base ${
                               profileData.interests.includes(interest)
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -654,7 +658,7 @@ const handleGenBioClicked = async () => {
                       {profileData.interests.map((interest) => (
                         <span
                           key={interest}
-                          className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-full"
+                          className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500/20 text-blue-400 rounded-full text-sm sm:text-base"
                         >
                           {interest}
                         </span>
@@ -664,14 +668,14 @@ const handleGenBioClicked = async () => {
                 </div>
 
                 {/* Schedule */}
-                <div className="bg-gray-700/30 rounded-2xl p-6 border border-gray-600">
-                  <h2 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gray-700/30 rounded-2xl p-4 sm:p-6 border border-gray-600">
+                  <h2 className="text-lg sm:text-xl font-semibold text-blue-400 mb-3 sm:mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     Schedule & Habits
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {isEditing ? (
                       <>
                         <div>
@@ -706,12 +710,12 @@ const handleGenBioClicked = async () => {
                     ) : (
                       <>
                         <div>
-                          <p className="text-gray-400 text-sm">Work Schedule</p>
-                          <p className="text-white">{profileData.workSchedule}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Work Schedule</p>
+                          <p className="text-white text-sm sm:text-base">{profileData.workSchedule}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-sm">Guest Policy</p>
-                          <p className="text-white capitalize">{profileData.guests}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm">Guest Policy</p>
+                          <p className="text-white text-sm sm:text-base capitalize">{profileData.guests}</p>
                         </div>
                       </>
                     )}
