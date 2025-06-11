@@ -68,7 +68,7 @@ const Likes = () => {
         isAuthenticated={true} 
       />
 
-      <div className="flex-1 overflow-auto">
+      <section className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
@@ -96,11 +96,11 @@ const Likes = () => {
             )}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Contact Info Modal */}
       {showContact && selectedMatch && (
-        <div 
+        <section 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={() => setShowContact(false)}
         >
@@ -134,51 +134,12 @@ const Likes = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Contact Info Modal */}
-      {showContact && selectedMatch && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 py-8"
-          onClick={() => setShowContact(false)}
-        >
-          <div 
-            className="bg-gray-800 rounded-2xl p-6 sm:p-8 w-full max-w-md relative mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setShowContact(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6">Contact Information</h2>
-            
-            <div className="space-y-3 sm:space-y-4">
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm mb-1">Email</p>
-                <p className="font-medium text-sm sm:text-base">{selectedMatch.contact.email}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm mb-1">Phone</p>
-                <p className="font-medium text-sm sm:text-base">{selectedMatch.contact.phone}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm mb-1">Instagram</p>
-                <p className="font-medium text-sm sm:text-base">{selectedMatch.contact.instagram}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        </section>
       )}
 
       {/* Full Profile Modal */}
       {showProfile && selectedMatch && (
-        <div 
+        <section
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setShowProfile(false)}
         >
@@ -201,14 +162,14 @@ const Likes = () => {
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-2xl sm:text-3xl font-bold mx-auto sm:mx-0">
                   {selectedMatch.name[0]}{selectedMatch.name[1]}
                 </div>
-                <div className="text-center sm:text-left">
+                <header className="text-center sm:text-left">
                   <h2 className="text-xl sm:text-2xl font-bold mb-1">{selectedMatch.name}</h2>
                   <p className="text-sm sm:text-base text-gray-400">{selectedMatch.occupation}</p>
                   <p className="text-sm sm:text-base text-gray-400">{selectedMatch.location}</p>
                   <p className="text-xs sm:text-sm text-blue-400 mt-1">
                     Match Score: {(selectedMatch.matchScore * 100).toFixed(1)}%
                   </p>
-                </div>
+                </header>
               </div>
             </div>
 
@@ -290,7 +251,7 @@ const Likes = () => {
             </div>
 
             {/* Modal Footer - Fixed */}
-            <div className="p-4 sm:p-8 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
+            <footer className="p-4 sm:p-8 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
               <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-2">
                 <button
                  onClick={() => {
@@ -316,9 +277,9 @@ const Likes = () => {
                   Close
                 </button>
               </div>
-            </div>
+            </footer>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

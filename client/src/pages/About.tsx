@@ -42,7 +42,7 @@ const About = () => {
       <Navbar isAuthenticated={isAuthenticated} />
 
       {/* Main Content */}
-      <div className="flex-1 flex  ">
+      <section className="flex-1 flex  ">
         <div className="max-w-4xl mx-auto px-4 text-center">
           {/* Header */}
           <h1 className="text-6xl font-bold mb-12 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
@@ -50,16 +50,16 @@ const About = () => {
           </h1>
           
           {/* Text Content Section */}
-          <div className="text-gray-300 text-lg leading-relaxed">
+          <article className="text-gray-300 text-lg leading-relaxed">
             <p>
                 Welcome to RoomieMatch, the ultimate platform for finding your ideal roommate! Whether you're a student, young professional, or just looking for a change, RoomieMatch connects you with like-minded individuals to make your living experience enjoyable and hassle-free. 
                 <br/>
                 <br/>
                 Created by Annesh Bothala, Lauren Liu, and Alexander Chen
             </p>
-          </div>
+          </article>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

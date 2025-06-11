@@ -61,7 +61,7 @@ const Matches = () => {
         isAuthenticated={true} 
       />
       
-      <div className="flex-1 overflow-auto">
+      <section className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 pb-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
@@ -89,11 +89,11 @@ const Matches = () => {
             )}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Contact Info Modal */}
       {showContact && selectedMatch && (
-        <div 
+        <section
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 py-8"
           onClick={() => setShowContact(false)}
         >
@@ -127,12 +127,12 @@ const Matches = () => {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Full Profile Modal */}
       {showProfile && selectedMatch && (
-        <div 
+        <section 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setShowProfile(false)}
         >
@@ -155,14 +155,14 @@ const Matches = () => {
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-2xl sm:text-3xl font-bold mx-auto sm:mx-0">
                   {selectedMatch.name[0]}{selectedMatch.name[1]}
                 </div>
-                <div className="text-center sm:text-left">
+                <header className="text-center sm:text-left">
                   <h2 className="text-xl sm:text-2xl font-bold mb-1">{selectedMatch.name}</h2>
                   <p className="text-sm sm:text-base text-gray-400">{selectedMatch.occupation}</p>
                   <p className="text-sm sm:text-base text-gray-400">{selectedMatch.location}</p>
                   <p className="text-xs sm:text-sm text-blue-400 mt-1">
                     Match Score: {(selectedMatch.matchScore * 100).toFixed(1)}%
                   </p>
-                </div>
+                </header>
               </div>
             </div>
 
@@ -244,7 +244,7 @@ const Matches = () => {
             </div>
 
             {/* Modal Footer - Fixed */}
-            <div className="p-4 sm:p-8 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
+            <footer className="p-4 sm:p-8 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
               <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-2">
                 <button
                   onClick={() => {
@@ -262,9 +262,9 @@ const Matches = () => {
                   Close
                 </button>
               </div>
-            </div>
+            </footer>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

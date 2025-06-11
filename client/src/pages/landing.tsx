@@ -71,9 +71,10 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
     <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar isAuthenticated={isAuthenticated} />
 
-      {/* Hero Section */}
+
       <div className="flex-1 overflow-auto">
-        <div className="container mx-auto px-4 py-20">
+        {/* Hero Section */}
+        <section className="container mx-auto px-4 py-20">
           <div className="text-center mb-20">
             <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
               Find Your Perfect Roommate
@@ -97,10 +98,10 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
               </button>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pb-4">
+        <section className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pb-4">
           <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700 hover:border-blue-500/50 transition-all">
             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +129,7 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
             <h3 className="text-xl font-semibold mb-3 text-blue-400">Easy Communication</h3>
             <p className="text-gray-400">Chat with potential roommates directly through our secure platform</p>
           </div>
-        </div>
+        </section>
       </div>
 
       {/* Login Form Modal */}
