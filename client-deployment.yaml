@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: team28-client
-        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v1
+        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9
         ports:
-        - containerPort: 5173
+        - containerPort: 4173
         env:
         - name: VITE_DOCKER
           value: "true"
@@ -32,5 +32,5 @@ spec:
     app: team28-client
   ports:
   - port: 80
-    targetPort: 5173
+    targetPort: 4173
   type: LoadBalancer

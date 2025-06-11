@@ -2,8 +2,10 @@ FROM node:18
 
 WORKDIR /app
 COPY server/package*.json ./
-RUN npm install
-COPY server .
+RUN npm ci --omit=dev
+COPY server ./
+
+ENV NODE_ENV=production
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["node", "index.js"]

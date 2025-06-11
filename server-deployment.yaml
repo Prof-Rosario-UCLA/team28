@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: team28-server
-        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v1
+        image: us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5
         ports:
         - containerPort: 3000
         env:
@@ -42,6 +42,8 @@ spec:
             secretKeyRef:
               name: team28-secrets
               key: JWT_SECRET
+        - name: NODE_ENV
+          value: production
 ---
 apiVersion: v1
 kind: Service

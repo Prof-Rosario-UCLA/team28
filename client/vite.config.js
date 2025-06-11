@@ -74,7 +74,7 @@ export default defineConfig({
     port: 4173,
     proxy: {
       '/api': {
-        target: isDocker ? 'http://server:3000' : 'http://localhost:3000', //cahgne to https? 'https://d716-2607-f010-2a7-301e-84d1-58b6-b168-3955.ngrok-free.app'
+        target: isDocker ? 'http://team28-server:3000' : 'http://localhost:3000', //cahgne to https? 'https://d716-2607-f010-2a7-301e-84d1-58b6-b168-3955.ngrok-free.app'
         changeOrigin: true,
         secure: false,
       },

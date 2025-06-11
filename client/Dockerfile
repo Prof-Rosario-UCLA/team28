@@ -10,7 +10,8 @@ ENV VITE_DOCKER=$VITE_DOCKER
 
 COPY client/package*.json ./
 RUN npm install
-COPY client .
+COPY client ./
 
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+RUN npm run build
+EXPOSE 4173
+CMD ["npx", "vite", "preview", "--host", "0.0.0.0"]
