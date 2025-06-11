@@ -247,48 +247,46 @@ const handleGenBioClicked = async () => {
     <Navbar isAuthenticated={true} />
     
     {/* Fixed Header */}
-    <div className="flex-shrink-0 px-4 pt-0 pb-2 sm:px-4 sm:pt-6 sm:pb-4">
+    <div className="flex-shrink-0  pt-0 pb-2 sm:pt-6 sm:pb-4">
       <div className="container mx-auto">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              My Profile
-            </h1>
-            {isEditing ? (
-              <div className="flex items-center gap-2 sm:gap-4">
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  <span className="inline">Cancel</span>
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="hidden sm:inline">Save Changes</span>
-                  <span className="sm:hidden">Save</span>
-                </button>
-              </div>
-            ) : (
+        <div className="flex justify-between items-center px-4">
+          <h1 className="text-lg sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            My Profile
+          </h1>
+          {isEditing ? (
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
-                onClick={() => setIsEditing(true)}
-                className="px-2 py-1 bg-blue-500  text-white px-2 py-1 sm:px-4 sm:py-2  text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                onClick={() => setIsEditing(false)}
+                className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span className="hidden sm:inline">Edit Profile</span>
-                <span className="sm:hidden">Edit</span>
+                <span className="inline">Cancel</span>
               </button>
-            )}
-          </div>
+              <button
+                onClick={handleSave}
+                className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+              >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="hidden sm:inline">Save Changes</span>
+                <span className="sm:hidden">Save</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-2 py-1 bg-blue-500  text-white px-2 py-1 sm:px-4 sm:py-2  text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+              <span className="hidden sm:inline">Edit Profile</span>
+              <span className="sm:hidden">Edit</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

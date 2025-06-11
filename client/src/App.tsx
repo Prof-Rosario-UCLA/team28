@@ -7,6 +7,8 @@ import Likes from './pages/Likes';
 import PotentialMatches from './pages/PotentialMatches';
 import OnboardingForm from './components/OnboardingForm';
 import CookieConsent from './components/CookieConsent';
+import About from './pages/about';
+
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -24,8 +26,14 @@ const App = () => {
           return;
         }
 
+        if (!navigator.onLine) {
+          setIsAuthenticated(true);  // we know token exists
+          setIsLoading(false);
+          return;
+        }
+
         // verify token with backend
-        const response = await fetch('http://localhost:3000/api/auth/me', {
+        const response = await fetch('/api/auth/me', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -70,14 +78,7 @@ const App = () => {
               onLoginSuccess={() => setIsAuthenticated(true)}
             />
           } />
-          <Route path="/about" element={<div className="container mx-auto px-4 py-20 text-white">
-            <h1 className="text-4xl font-bold mb-8">About RoomieMatch</h1>
-            <p className="text-xl text-gray-300">Find your perfect roommate match!</p>
-          </div>} />
-          <Route path="/contact" element={<div className="container mx-auto px-4 py-20 text-white">
-            <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
-            <p className="text-xl text-gray-300">Get in touch with our team!</p>
-          </div>} />
+          <Route path="/about" element={<About />} />
           <Route
             path="/profile"
             element={

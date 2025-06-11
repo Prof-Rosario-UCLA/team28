@@ -100,7 +100,7 @@ const Landing = ({ onSignupSuccess, onLoginSuccess }: LandingProps) => {
         </div>
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pb-4">
           <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700 hover:border-blue-500/50 transition-all">
             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

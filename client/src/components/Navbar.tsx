@@ -46,7 +46,7 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   return (
     <nav className="container mx-auto px-4 pt-6 pb-3 sm:pb-6">
       <div className="flex justify-between items-center">
-        <Link to="/" className="text-lg sm:text-2xl font-bold text-blue-400">RoomieMatch</Link>
+        <Link to="/" className="text-lg sm:text-4xl font-bold text-blue-400">RoomieMatch</Link>
         <div className="space-x-1 sm:space-x-4">
           {isAuthenticated ? (
             <>
@@ -65,7 +65,6 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
             <>
               <Link to="/" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Home</Link>
               <Link to="/about" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">About</Link>
-              <Link to="/contact" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Contact</Link>
             </>
           )}
         </div>
