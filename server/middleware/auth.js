@@ -9,13 +9,21 @@ const auth = async (req, res, next) => {
     }
 
     if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET is not defined');
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
     try {
       const verified = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = verified;
+      
+      if (!verified.userId) {
+        return res.status(401).json({ message: 'Invalid token: no user ID' });
+      }
+
+      req.user = {
+        userId: verified.userId,
+        email: verified.email
+      };
+      
       next();
     } catch (jwtError) {
       console.error('JWT verification error:', jwtError);
