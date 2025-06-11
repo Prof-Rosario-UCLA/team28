@@ -44,28 +44,28 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   };
 
   return (
-    <nav className="container mx-auto px-4 py-6">
+    <nav className="container mx-auto px-4 pt-6 pb-3 sm:pb-6">
       <div className="flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-blue-400">RoomieMatch</Link>
-        <div className="space-x-4">
+        <Link to="/" className="text-lg sm:text-2xl font-bold text-blue-400">RoomieMatch</Link>
+        <div className="space-x-1 sm:space-x-4">
           {isAuthenticated ? (
             <>
-              <Link to="/potential-matches" className="text-gray-300 hover:text-white transition-colors">Find Matches</Link>
-              <Link to="/matches" className="text-gray-300 hover:text-white transition-colors">My Matches</Link>
-              <Link to="/likes" className="text-gray-300 hover:text-white transition-colors">Likes</Link>
-              <Link to="/profile" className="text-gray-300 hover:text-white transition-colors">Profile</Link>
+              <Link to="/potential-matches" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Find</Link>
+              <Link to="/matches" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Matches</Link>
+              <Link to="/likes" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Likes</Link>
+              <Link to="/profile" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Profile</Link>
               <button 
                 onClick={handleLogout}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base rounded hover:bg-blue-600 transition-colors"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
-              <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-              <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link>
+              <Link to="/" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Home</Link>
+              <Link to="/about" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">About</Link>
+              <Link to="/contact" className="text-xs sm:text-base text-gray-300 hover:text-white transition-colors">Contact</Link>
             </>
           )}
         </div>
@@ -74,4 +74,4 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
