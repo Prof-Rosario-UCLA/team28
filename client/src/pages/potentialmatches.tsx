@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { sendLike } from '../services/likesService'; // Adjust the import path as necessary
+import OfflineCard from '../components/OfflineCard';  
 
 interface PotentialMatch {
   _id: string;
@@ -37,11 +38,19 @@ const PotentialMatches = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [showProfile, setShowProfile] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch potential matches when component mounts
   useEffect(() => {
+    if (!navigator.onLine) {
+      setIsOffline(true);
+      setIsLoading(false);
+      return;
+    }
+    
+
     const fetchPotentialMatches = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -126,6 +135,13 @@ const PotentialMatches = () => {
       handleNotInterested();
     }
   };
+
+  if(isOffline){
+    <div className="h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col">
+        <Navbar isAuthenticated={true} />
+        <OfflineCard/>
+      </div>
+  }
 
   if (isLoading) {
     return (

@@ -15,17 +15,31 @@ export default defineConfig({
         'icon512.png',
         'defaultProfile.jpg'
       ],
-      manifest: {
-        name: 'My App',
-        short_name: 'App',
-        start_url: '/',
-        display: 'standalone',
+      manifest: {   
+        name: "RoomieMatch",
+        short_name: "RoomieMatch",
+        description: "Find your perfect roommate",
+        start_url: "/",
+        scope: "/",
+        display: "standalone",
+        background_color: "#1f2937",
+        theme_color: "#1f2937",
+        categories: ["productivity", "utilities"],
         icons: [
-          { src: 'icon192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icon512.png', sizes: '512x512', type: 'image/png' }
+          {
+            "src": "/icon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "/icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+          }
         ]
       },
       workbox: {
+        navigateFallback: '/index.html',
       },
       devOptions: {
         enabled: true,    // enable SW in npm run dev
