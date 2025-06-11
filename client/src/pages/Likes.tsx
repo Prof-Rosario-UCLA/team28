@@ -298,7 +298,7 @@ const Likes = () => {
                   }}
                   className="px-4 py-2.5 sm:px-6 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                 >
-                  View Contact Info
+                  Match
                 </button>
                 <button
                   onClick={() => {
