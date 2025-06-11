@@ -258,7 +258,7 @@ const handleGenBioClicked = async () => {
               <div className="flex items-center gap-2 sm:gap-4">
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-3 py-2 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                  className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -267,7 +267,7 @@ const handleGenBioClicked = async () => {
                 </button>
                 <button
                   onClick={handleSave}
-                  className="px-3 py-2 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                  className="px-2 py-1 bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -279,7 +279,7 @@ const handleGenBioClicked = async () => {
             ) : (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-3 py-2 sm:px-6 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                className="px-2 py-1 bg-blue-500  text-white px-2 py-1 sm:px-4 sm:py-2  text-xs sm:text-base text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -305,7 +305,7 @@ const handleGenBioClicked = async () => {
               <div className="flex-grow">
                 <div className="space-y-2 sm:space-y-4">
                   <div>
-                    <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">{profileData.fullName}</h1>
+                    <h1 className="text-lg sm:text-3xl font-bold mb-1 sm:mb-2">{profileData.fullName}</h1>
                     <p className="text-gray-400 text-sm sm:text-base">{profileData.occupation}</p>
                     <p className="text-gray-400 text-sm sm:text-base">{profileData.location}</p>
                     <p className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">

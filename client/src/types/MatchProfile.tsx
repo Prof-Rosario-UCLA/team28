@@ -10,10 +10,19 @@ export interface MatchProfile {
   lifestyle: string;
   schedule: string;
   noiseLevel: string;
+	cleanliness: string;
+	roomType: string;
+	leaseLength: string;
   interests: string[];
+  smoking: string;
+  pets: string;
+	guests: string;
+	workSchedule: string;
+
   contact: {
     email: string;
     phone: string;
     instagram: string;
   };
+  additionalNotes;
 }

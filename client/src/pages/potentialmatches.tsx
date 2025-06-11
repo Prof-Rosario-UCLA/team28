@@ -189,11 +189,11 @@ const PotentialMatches = () => {
   const currentMatch = potentialMatches[currentMatchIndex];
 
   return (
-    <div className="h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col">
+    <div className="h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col ">
       <Navbar isAuthenticated={true} />
       
       {/* Main content area - fixed height, no scrolling */}
-      <div className="flex-1 flex flex-col justify-center px-4">
+      <div className="flex-1 flex flex-col px-4 overflow-y-auto">
         <div className="max-w-6xl mx-auto w-full">
           {/* Title */}
           <div className="text-center mb-8">
@@ -202,8 +202,8 @@ const PotentialMatches = () => {
             </h1>
           </div>
           
-          {/* Drop zones and card container */}
-          <div className="flex items-center justify-between mb-8">
+          {/* Desktop: Drag zones and card */}
+          <div className="hidden md:flex items-center justify-between mb-8">
             <div
               id="reject-zone"
               className="w-1/4 h-48 bg-red-500/20 rounded-2xl border-2 border-red-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-red-500/30"
@@ -269,9 +269,71 @@ const PotentialMatches = () => {
             </div>
           </div>
 
+          {/* Mobile */}
+          <div className="md:hidden mb-8">
+            {/* Card */}
+            <div className="mb-6 px-4">
+              <div
+                className="bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-500"
+                onClick={() => setShowProfile(true)}
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-4">
+                    <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-2xl font-bold">
+                      {currentMatch.name[0]}{currentMatch.name[1]}
+                    </div>
+                  </div>
+                  <h2 className="text-xl font-bold mb-2">{currentMatch.name}</h2>
+                  <p className="text-gray-300 text-base mb-1">{currentMatch.profile.occupation}</p>
+                  <p className="text-gray-400 text-sm">{currentMatch.profile.location}</p>
+                  <div className="mt-3 flex flex-wrap gap-2 justify-center">
+                    {currentMatch.profile.interests.slice(0, 3).map((interest) => (
+                      <span
+                        key={interest}
+                        className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs"
+                      >
+                        {interest}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-400">
+                    Match Score: {(currentMatch.similarity * 100).toFixed(1)}%
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex gap-4 px-8">
+              <button 
+                onClick={() => handleNotInterested()}
+                className="flex-1 bg-red-500/20 border-2 border-red-500 text-red-500 py-4 rounded-xl font-bold text-lg hover:bg-red-500/30 transition-colors active:scale-95 flex items-center justify-center gap-2"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Pass
+              </button>
+              <button 
+                onClick={() => handleLike(currentMatch._id)}
+                className="flex-1 bg-green-500/20 border-2 border-green-500 text-green-500 py-4 rounded-xl font-bold text-lg hover:bg-green-500/30 transition-colors active:scale-95 flex items-center justify-center gap-2"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Like
+              </button>
+            </div>
+          </div>
+
           {/* Instructions */}
           <div className="text-center">
-            <p className="text-gray-300 text-xl mb-3 font-medium">Drag the card left to reject, or right to accept!</p>
+            <p className="text-gray-300 text-xl mb-3 font-medium hidden md:block">
+              Drag the card left to reject, or right to accept!
+            </p>
+            <p className="text-gray-300 text-lg mb-3 font-medium md:hidden">
+              Tap the buttons below to pass or like!
+            </p>
             <p className="text-gray-400">You can click the card to view full profile</p>
           </div>
         </div>
@@ -288,25 +350,25 @@ const PotentialMatches = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header - Fixed */}
-            <div className="p-8 pb-4 border-b border-gray-700 flex-shrink-0">
+            <div className="p-4 sm:p-8 pb-3 sm:pb-4 border-b border-gray-700 flex-shrink-0">
               <button
                 onClick={() => setShowProfile(false)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              <div className="flex items-center space-x-6">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-3xl font-bold">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-2xl sm:text-3xl font-bold mx-auto sm:mx-0">
                   {currentMatch.name[0]}{currentMatch.name[1]}
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold mb-1">{currentMatch.name}</h2>
-                  <p className="text-gray-400">{currentMatch.profile.occupation}</p>
-                  <p className="text-gray-400">{currentMatch.profile.location}</p>
-                  <p className="text-sm text-blue-400 mt-1">
+                <div className="text-center sm:text-left">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1">{currentMatch.name}</h2>
+                  <p className="text-sm sm:text-base text-gray-400">{currentMatch.profile.occupation}</p>
+                  <p className="text-sm sm:text-base text-gray-400">{currentMatch.profile.location}</p>
+                  <p className="text-xs sm:text-sm text-blue-400 mt-1">
                     Match Score: {(currentMatch.similarity * 100).toFixed(1)}%
                   </p>
                 </div>
@@ -314,64 +376,64 @@ const PotentialMatches = () => {
             </div>
 
             {/* Modal Content - Scrollable */}
-            <div className="flex-1 overflow-y-auto p-8 pt-6">
-              <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-8 pt-4 sm:pt-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-2">About</h3>
-                  <p className="text-gray-300">{currentMatch.profile.bio}</p>
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">About</h3>
+                  <p className="text-sm sm:text-base text-gray-300">{currentMatch.profile.bio}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-2">Living Preferences</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Room Type</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.roomType}</p>
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">Living Preferences</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Room Type</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.roomType}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Lease Length</p>
-                      <p className="font-medium">{currentMatch.profile.leaseLength}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Lease Length</p>
+                      <p className="text-sm sm:text-base font-medium">{currentMatch.profile.leaseLength}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Cleanliness</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.cleanliness}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Cleanliness</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.cleanliness}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Noise Level</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.noiseLevel}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Noise Level</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.noiseLevel}</p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-2">Lifestyle & Habits</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Smoking</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.smoking}</p>
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">Lifestyle & Habits</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Smoking</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.smoking}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Pets</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.pets}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Pets</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.pets}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Work Schedule</p>
-                      <p className="font-medium">{currentMatch.profile.workSchedule}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Work Schedule</p>
+                      <p className="text-sm sm:text-base font-medium">{currentMatch.profile.workSchedule}</p>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      <p className="text-gray-400 text-sm mb-1">Guests</p>
-                      <p className="font-medium capitalize">{currentMatch.profile.guests}</p>
+                    <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                      <p className="text-gray-400 text-xs sm:text-sm mb-1">Guests</p>
+                      <p className="text-sm sm:text-base font-medium capitalize">{currentMatch.profile.guests}</p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-2">Interests & Activities</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">Interests & Activities</h3>
                   <div className="flex flex-wrap gap-2">
                     {currentMatch.profile.interests.map((interest) => (
                       <span
                         key={interest}
-                        className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-full"
+                        className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500/20 text-blue-400 rounded-full text-xs sm:text-sm"
                       >
                         {interest}
                       </span>
@@ -380,9 +442,9 @@ const PotentialMatches = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-2">Additional Notes</h3>
-                  <div className="bg-gray-700/50 p-4 rounded-lg">
-                    <p className="text-gray-300">
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">Additional Notes</h3>
+                  <div className="bg-gray-700/50 p-3 sm:p-4 rounded-lg">
+                    <p className="text-sm sm:text-base text-gray-300">
                       {currentMatch.profile.additionalNotes}
                     </p>
                   </div>
@@ -391,11 +453,11 @@ const PotentialMatches = () => {
             </div>
 
             {/* Modal Footer - Fixed */}
-            <div className="p-8 pt-4 border-t border-gray-700 flex-shrink-0">
-              <div className="flex justify-end">
+            <div className="p-4 sm:p-8 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
+              <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-2">
                 <button
                   onClick={() => setShowProfile(false)}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="px-4 py-2.5 sm:px-6 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                 >
                   Close
                 </button>
