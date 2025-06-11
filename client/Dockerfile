@@ -10,7 +10,7 @@ ENV VITE_DOCKER=$VITE_DOCKER
 
 COPY client/package*.json ./
 RUN npm install
-COPY client ./
+COPY . .
 
 RUN npm run build
 EXPOSE 4173
