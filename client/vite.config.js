@@ -1,11 +1,39 @@
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react';
 import fs from 'fs';
 
 const isDocker = process.env.DOCKER === 'true';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(),
+    VitePWA({
+      registerType: 'autoUpdate',     
+      includeAssets: [
+        'favicon.ico',
+        'icon192.png',
+        'icon512.png',
+        'defaultProfile.jpg'
+      ],
+      manifest: {
+        name: 'My App',
+        short_name: 'App',
+        start_url: '/',
+        display: 'standalone',
+        icons: [
+          { src: 'icon192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icon512.png', sizes: '512x512', type: 'image/png' }
+        ]
+      },
+      workbox: {
+      },
+      devOptions: {
+        enabled: true,    // enable SW in npm run dev
+        type: 'module'
+      }
+    })
+  ],
+  
   css: {
     postcss: './postcss.config.cjs',
   },
