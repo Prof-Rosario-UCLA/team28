@@ -4,18 +4,18 @@ const { getUserVector, searchSimilarUsers } = require('../utils/qdrantUtils');
 
 const potentialController = {
   // Get potential matches for a user
-  getPotentialMatches: async (req, res) => {
+  getPotentialMatches: async (userId) => {
     try {
-      console.log('1. Getting potential matches for user:', req.user.userId);
+      console.log('1. Getting potential matches for user:', userId);
       
       // Get similar users from Qdrant
-      const qdrantId = parseInt(req.user.userId.toString().slice(-6), 16); // convert MongoDB ObjectId to numeric ID for Qdrant
+      const qdrantId = parseInt(userId.toString().slice(-6), 16); // convert MongoDB ObjectId to numeric ID for Qdrant
       const similarUsers = await searchSimilarUsers(qdrantId, 20);
       
       // Get full user data for all similar users from MongoDB
       const userIds = similarUsers
         .map(match => match.payload.mongoId)        
-        .filter(id => id !== req.user.userId); 
+        .filter(id => id !== userId); 
       const users = await User.find({ 
         _id: { $in: userIds } 
       }).select('-password');
@@ -29,23 +29,21 @@ const potentialController = {
         .sort((a, b) => b.similarity - a.similarity);
 
       // Filter to exclude users that are already in the user's matches or likes
-      const myMatchesDocs = await Match.find({ users: req.user.userId }).select('users');
+      const myMatchesDocs = await Match.find({ users: userId }).select('users');
       const matchedUserIds = myMatchesDocs.flatMap(match => 
         match.users
-          .filter(userId => userId.toString() !== req.user.userId.toString())
-          .map(userId => userId.toString())
+          .filter(id => id.toString() !== userId.toString())
+          .map(id => id.toString())
       );
 
       const filteredPotentialMatches = potentialMatches.filter(user => 
         !matchedUserIds.includes(user._id.toString())
       );
-      // TODO: Potentially also filter for liked profiles
-      // TODO: display similarity score on the frontend
 
-      res.json(filteredPotentialMatches);
+      return filteredPotentialMatches;
     } catch (error) {
       console.error('Error getting potential matches:', error);
-      res.status(500).json({ message: 'Error getting potential matches', error: error.message });
+      throw error; // Let the route handle the error
     }
   }
 };

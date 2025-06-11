@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 dotenv.config();
 
 // DB 
-const { connectMongoDB, redis} = require('./config/database');
+const { connectMongoDB, connectRedis, redis } = require('./config/database');
 
 // Route imports
 const matchRoutes = require('./routes/matches');
@@ -51,6 +51,26 @@ app.use((err, req, res, next) => {
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
+
+// Initialize connections
+const initializeConnections = async () => {
+  try {
+    await connectMongoDB();
+    console.log('MongoDB connected');
+    
+    await connectRedis();
+    console.log('Redis connected');
+    
+    // Test Redis connection
+    const pingResult = await redis.ping();
+    console.log('Redis ping successful:', pingResult);
+  } catch (error) {
+    console.error('Error initializing connections:', error);
+    process.exit(1);
+  }
+};
+
+initializeConnections();
 
 // Start server
 const PORT = process.env.PORT || 3000;
