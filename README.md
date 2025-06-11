@@ -21,3 +21,18 @@ In the `server/` directory, run `npm install` and `npm run dev` to start the ser
 Fill out the `client/.example_env` file with the proper environment variables. Rename this file to `.env`.
 
 In the `client/` directory, run `npm install` and `npm run dev` to host the user interface on `http://localhost:5173`.
+
+## Redis Setup
+To set up Redis for the project:
+
+1. Install Redis server:
+```bash
+brew install redis
+```
+
+2. Run `npm install` in the server directory to install all dependencies including Redis
+
+3. Start Redis server (needs to be run each time you start working on the project):
+```bash
+redis-server
+```
