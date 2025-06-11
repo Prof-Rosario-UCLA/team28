@@ -9,114 +9,7 @@ import { MatchProfile } from '../types/MatchProfile';
 import OfflineCard from '../components/OfflineCard';
 import DefaultProfile from '/defaultProfile.jpg';
 
-// Mock data for past matches. this would be the user's matches' full data from MongoDB 
-const mockMatches = [
-  {
-    id: 1,
-    name: 'Hello Kitty',
-    age: 25,
-    occupation: 'Fashion Designer',
-    location: 'Sanrio Town, CA',
-    matchScore: 95,
-    image: 'https://news.harvard.edu/wp-content/uploads/2014/10/hello-kitty-wallpaper-37_605.jpg',
-    bio: 'Sweet and friendly fashion enthusiast who loves baking and making new friends. Looking for a clean, cozy environment to share.',
-    compatibility: {
-      lifestyle: 'Very Clean',
-      schedule: '9-5',
-      noiseLevel: 'Quiet',
-    },
-    interests: ['Fashion', 'Baking', 'Crafts'],
-    contact: {
-      email: 'hello.kitty@sanrio.com',
-      phone: '(555) 123-4567',
-      instagram: '@hellokitty_official'
-    }
-  },
-  {
-    id: 2,
-    name: 'My Melody',
-    age: 24,
-    occupation: 'Baker',
-    location: 'Sanrio Town, CA',
-    matchScore: 88,
-    image: 'https://i.shgcdn.com/0465384c-9563-417b-b638-517529f21c3c/-/format/auto/-/preview/3000x3000/-/quality/lighter/',
-    bio: 'Passionate baker who loves creating sweet treats. Looking for a roommate who appreciates a warm, welcoming home environment.',
-    compatibility: {
-      lifestyle: 'Moderate',
-      schedule: 'Flexible',
-      noiseLevel: 'Moderate',
-    },
-    interests: ['Baking', 'Cooking', 'Gardening'],
-    contact: {
-      email: 'my.melody@sanrio.com',
-      phone: '(555) 234-5678',
-      instagram: '@mymelody_official'
-    }
-  },
-  {
-    id: 3,
-    name: 'Cinnamoroll',
-    age: 23,
-    occupation: 'Cafe Owner',
-    location: 'Sanrio Town, CA',
-    matchScore: 82,
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR6QL1cfQM1LXN5qavJ1IsQDJV83MMHn-ZKg&s',
-    bio: 'Cafe owner who loves creating a cozy atmosphere. Prefers a peaceful, organized space with lots of natural light.',
-    compatibility: {
-      lifestyle: 'Very Clean',
-      schedule: '9-5',
-      noiseLevel: 'Quiet',
-    },
-    interests: ['Coffee', 'Interior Design', 'Photography'],
-    contact: {
-      email: 'cinnamoroll@sanrio.com',
-      phone: '(555) 345-6789',
-      instagram: '@cinnamoroll_official'
-    }
-  },
-  {
-    id: 4,
-    name: 'Keroppi',
-    age: 26,
-    occupation: 'Environmental Scientist',
-    location: 'Sanrio Town, CA',
-    matchScore: 78,
-    image: 'https://files.merca20.com/uploads/2024/11/KEROPPI-SANRIO-2024.jpg',
-    bio: 'Nature lover and environmental scientist who enjoys outdoor activities. Looking for a roommate who shares a passion for sustainability.',
-    compatibility: {
-      lifestyle: 'Moderate',
-      schedule: 'Flexible',
-      noiseLevel: 'Moderate',
-    },
-    interests: ['Nature', 'Sports', 'Science'],
-    contact: {
-      email: 'keroppi@sanrio.com',
-      phone: '(555) 456-7890',
-      instagram: '@keroppi_official'
-    }
-  },
-  {
-    id: 5,
-    name: 'Pompompurin',
-    age: 25,
-    occupation: 'Chef',
-    location: 'Sanrio Town, CA',
-    matchScore: 75,
-    image: 'https://i.shgcdn.com/b613badd-3986-4479-9176-6322a7d9192f/-/format/auto/-/preview/3000x3000/-/quality/lighter/',
-    bio: 'Professional chef who loves creating delicious meals. Looking for a roommate who enjoys good food and a clean kitchen.',
-    compatibility: {
-      lifestyle: 'Very Clean',
-      schedule: 'Flexible',
-      noiseLevel: 'Moderate',
-    },
-    interests: ['Cooking', 'Food', 'Travel'],
-    contact: {
-      email: 'pompompurin@sanrio.com',
-      phone: '(555) 567-8901',
-      instagram: '@pompompurin_official'
-    }
-  }
-];
+
 
 const Matches = () => {
   const navigate = useNavigate();
@@ -240,7 +133,7 @@ const Matches = () => {
       {/* Full Profile Modal */}
       {showProfile && selectedMatch && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto py-8"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={() => setShowProfile(false)}
         >
           <div 
