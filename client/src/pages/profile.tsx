@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import OfflineCard from '../components/OfflineCard';
+import Loading from '../components/Loading';
 
 
 interface ProfileData {
@@ -214,13 +215,26 @@ const handleGenBioClicked = async () => {
       setError('Failed to update profile');
     }
   };
+  if (isOffline){
+    return(
+      <div>
+        <Navbar isAuthenticated={true} />
+        <OfflineCard />
+      </div>
+    )
+  }
+  if (isLoading){
+    return(
+      <div>
+        <Navbar isAuthenticated={true} />
+        <Loading />
+      </div>
+    )
+  }
 
   if (!profileData) {
     return (
-      <div>
-        <Navbar isAuthenticated={true}/>
-        <OfflineCard />
-      </div>
+      null
     )
   }
 
