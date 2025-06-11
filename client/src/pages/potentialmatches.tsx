@@ -100,27 +100,30 @@ const PotentialMatches = () => {
 
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
-    setDragPosition({
-      x: e.clientX,
-      y: e.clientY
-    });
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    if (isDragging) {
-      setDragPosition({
-        x: e.clientX,
-        y: e.clientY
-      });
-    }
+    // Set the drag image to be the card itself
+    const card = e.currentTarget as HTMLElement;
+    e.dataTransfer.setDragImage(card, card.offsetWidth / 2, card.offsetHeight / 2);
+    // Set data to identify the card
+    e.dataTransfer.setData('text/plain', potentialMatches[currentMatchIndex]._id);
   };
 
   const handleDragEnd = (e: React.DragEvent) => {
     setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault(); // needed to allow dropping
+  };
+
+  const handleDrop = (e: React.DragEvent, action: 'like' | 'reject') => {
+    // calls handle like func if its a like, otherwise calls handle not interested
+    e.preventDefault();
+    setIsDragging(false);
     
-    // Move to next potential match
-    if (currentMatchIndex < potentialMatches.length - 1) {
-      setCurrentMatchIndex(prev => prev + 1);
+    if (action === 'like') {
+      handleLike(potentialMatches[currentMatchIndex]._id);
+    } else {
+      handleNotInterested();
     }
   };
 
@@ -196,6 +199,8 @@ const PotentialMatches = () => {
                 id="reject-zone"
                 className="w-1/4 h-48 bg-red-500/20 rounded-2xl border-2 border-red-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-red-500/30"
                 onClick={() => handleNotInterested()}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, 'reject')}
               >
                 <div className="text-center p-6">
                   <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,13 +214,9 @@ const PotentialMatches = () => {
               <div
                 draggable
                 onDragStart={handleDragStart}
-                onDrag={handleDrag}
                 onDragEnd={handleDragEnd}
                 className={`w-1/3 bg-gray-800/50 rounded-2xl p-8 backdrop-blur-sm border border-gray-700 cursor-move shadow-lg mx-12
                   ${isDragging ? 'opacity-50' : 'hover:shadow-xl transition-all duration-300 hover:border-blue-500'}`}
-                style={{
-                  transform: isDragging ? `translate(${dragPosition.x}px, ${dragPosition.y}px)` : 'none'
-                }}
                 onClick={() => setShowProfile(true)}
               >
                 <div className="flex flex-col items-center text-center">
@@ -247,6 +248,8 @@ const PotentialMatches = () => {
                 id="accept-zone"
                 className="w-1/4 h-48 bg-green-500/20 rounded-2xl border-2 border-green-500 flex items-center justify-center transform hover:scale-105 transition-transform hover:bg-green-500/30"
                 onClick={() => handleLike(currentMatch._id)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, 'like')}
               >
                 <div className="text-center p-6" >
                   <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
