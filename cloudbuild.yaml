@@ -43,7 +43,7 @@ steps:
     env:
         - 'CLOUDSDK_PROJECT=cs144-s25-aneeshbonthala'
         - 'CLOUDSDK_COMPUTE_ZONE=us-west1-a'
-        - 'CLOUDSDK_CONTAINER_CLUSTER=roommiemmatch'
+        - 'CLOUDSDK_CONTAINER_CLUSTER=roommiematch'
     args:
       - apply
       - -f
