@@ -4,43 +4,46 @@ options:
 steps:
   # Build client
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build',
-      '-t', 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9',
-      '-f', 'client/Dockerfile',
-      'client'
-    ]
+    args:
+      - build
+      - -t
+      - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9
+      - -f
+      - client/Dockerfile
+      - client
 
   # Push client image
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push',
-      'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9'
-    ]
+    args:
+      - push
+      - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9
 
   # Build server
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build',
-      '-t', 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5',
-      '-f', 'server/Dockerfile',
-      'server'
-    ]
+    args:
+      - build
+      - -t
+      - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5
+      - -f
+      - server/Dockerfile
+      - server
 
   # Push server image
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push',
-      'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5'
-    ]
+    args:
+      - push
+      - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5
 
   # Deploy Kubernetes manifests
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-west1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=roomiematch'
-    args: ['apply', '-f', 'k8s/']
+    args:
+      - apply
+      - -f
+      - k8s/
 
 images:
-  - 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9'
-  - 'us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5'
+  - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9
+  - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5
