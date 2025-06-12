@@ -2,7 +2,6 @@ options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
 steps:
-  # Build client
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
@@ -12,13 +11,11 @@ steps:
       - client/Dockerfile
       - client
 
-  # Push client image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
       - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-client:v9
 
-  # Build server
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
@@ -28,17 +25,20 @@ steps:
       - server/Dockerfile
       - server
 
-  # Push server image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
       - us-west1-docker.pkg.dev/cs144-25s-aneeshbonthala/roommiematch/team28-server:v5
 
-  # Deploy Kubernetes manifests
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials roomiematch \
+          --region us-west1
+
   - name: 'gcr.io/cloud-builders/kubectl'
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-west1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=roomiematch'
     args:
       - apply
       - -f
