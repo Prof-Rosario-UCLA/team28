@@ -40,6 +40,10 @@ steps:
           --zone us-west1-a
 
   - name: 'gcr.io/cloud-builders/kubectl'
+    env:
+        - 'CLOUDSDK_PROJECT=cs144-s25-aneeshbonthala'
+        - 'CLOUDSDK_COMPUTE_ZONE=us-west1-a'
+        - 'CLOUDSDK_CONTAINER_CLUSTER=roommiemmatch'
     args:
       - apply
       - -f
