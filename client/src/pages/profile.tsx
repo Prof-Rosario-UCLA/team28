@@ -103,16 +103,11 @@ const handleGenBioClicked = async () => {
     
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/');
-          return;
-        }
+
 
         const response = await fetch('/api/profile/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include',
+
         });
 
         if (!response.ok) {
@@ -135,7 +130,24 @@ const handleGenBioClicked = async () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to log out');
+        }
+        return response.json();
+      })
+      .then(() => {
+        setProfileData(null);
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Logout error:', error);
+        setError('Failed to log out');
+      });
     navigate('/');
   };
 
@@ -175,17 +187,26 @@ const handleGenBioClicked = async () => {
     if (!profileData) return;
     
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
+      const responseVerify = await fetch('/api/profile/me', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          profile: profileData
+        })
+      });
+      if (!responseVerify.ok) {
         navigate('/');
         return;
       }
 
       const response = await fetch('/api/profile/update', {
+        credentials: 'include',
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           profile: profileData

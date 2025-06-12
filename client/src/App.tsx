@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Landing from './pages/landing';
-import Profile from './pages/profile';
+import Landing from './pages/Landing';
+import Profile from './pages/Profile';
 import Matches from './pages/Matches';
 import Likes from './pages/Likes';
-import PotentialMatches from './pages/potentialmatches';
+import PotentialMatches from './pages/PotentialMatches';
 import OnboardingForm from './components/OnboardingForm';
 import CookieConsent from './components/CookieConsent';
-import About from './pages/About';
+import About from './pages/about';
 
 
 const App = () => {
@@ -19,33 +19,18 @@ const App = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setIsAuthenticated(false);
-          setIsLoading(false);
-          return;
-        }
-
         if (!navigator.onLine) {
           setIsAuthenticated(true);  // we know token exists
           setIsLoading(false);
           return;
         }
-
-        // verify token with backend
         const response = await fetch('/api/auth/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          method: 'GET',
+          credentials: 'include'   
         });
 
-        if (response.ok) {
-          setIsAuthenticated(true);
-        } else {
-          // Token is invalid or expired
-          localStorage.removeItem('token');
-          setIsAuthenticated(false);
-        }
+        setIsAuthenticated(response.ok);
+
       } catch (error) {
         console.error('Auth check error:', error);
         setIsAuthenticated(false);

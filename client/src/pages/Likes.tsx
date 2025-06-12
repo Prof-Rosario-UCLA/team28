@@ -26,7 +26,7 @@ const Likes = () => {
       setLoading(false);
       return;
     }
-    getLikes(localStorage.getItem('token') || '')
+    getLikes()
       .then((profiles) => {
         setLoading(false);
         console.log("Loaded likes:", profiles);
@@ -53,7 +53,7 @@ const Likes = () => {
 
   //when matching with someone who likes you, sendLike matches if other person has already liked you
   const handleMatch = (matchedName : string, likedUserId : string) => {
-    sendLike(likedUserId, localStorage.getItem('token') || '')
+    sendLike(likedUserId)
       .then(() => {
         alert('You have successfully matched with ' + matchedName);
         setShowProfile(false);

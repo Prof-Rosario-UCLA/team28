@@ -1,10 +1,9 @@
 //get who liked you
-export async function getMatches(token) {
+export async function getMatches() {
   const res = await fetch(`/api/matches/my-matches`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     },
     credentials: 'include'  
 

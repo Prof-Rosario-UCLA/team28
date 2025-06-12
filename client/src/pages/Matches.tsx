@@ -29,7 +29,7 @@ const Matches = () => {
     }
     
 
-    getMatches(localStorage.getItem('token') || '')
+    getMatches()
       .then((profiles) => {
         setLoading(false);
         console.log("Loaded matches:", profiles);

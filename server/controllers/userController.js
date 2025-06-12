@@ -34,8 +34,14 @@ const register = async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      //secure: process.env.NODE_ENV === 'production', currently https issues
+      sameSite: 'Lax', // Prevent CSRF attacks
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
     res.status(201).json({
-      token,
       user: {
         id: user._id,
         email: user.email,
@@ -72,8 +78,14 @@ const login = async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      //secure: process.env.NODE_ENV === 'production', currently https issues
+      sameSite: 'Lax', // Prevent CSRF attacks
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
     res.json({
-      token,
       user: {
         id: user._id,
         email: user.email,

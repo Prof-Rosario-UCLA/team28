@@ -53,16 +53,8 @@ const PotentialMatches = () => {
 
     const fetchPotentialMatches = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/');
-          return;
-        }
-
         const response = await fetch('/api/potential', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include',
         });
 
         if (!response.ok) {
@@ -83,7 +75,7 @@ const PotentialMatches = () => {
   }, [navigate]);
 
   const handleLike = (likedUserId : string) => {
-    sendLike(likedUserId, localStorage.getItem('token') || '')
+    sendLike(likedUserId)
       .then(() => {
         console.log('Like sent successfully');
         if (currentMatchIndex < potentialMatches.length - 1) {

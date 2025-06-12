@@ -1,10 +1,9 @@
 // src/services/likesService.js
-export async function sendLike(likedUserId, token) {
+export async function sendLike(likedUserId) {
   const res = await fetch(`/api/like`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     },
     credentials: 'include',
     body: JSON.stringify({ likedUserId })
@@ -14,14 +13,13 @@ export async function sendLike(likedUserId, token) {
 }
 
 //get who liked you
-export async function getLikes(token) {
+export async function getLikes() {
   const url = `/api/like/liked-me`;
   console.log('Full URL would be:', window.location.origin + url);
   const res = await fetch(`/api/like/liked-me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     },
     credentials: 'include'  
 

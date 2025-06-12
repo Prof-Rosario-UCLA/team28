@@ -48,8 +48,6 @@ const LoginForm = ({ onClose, onLoginSuccess }: LoginFormProps) => {
 
       const data = await response.json();
       
-      // store token in localStorage
-      localStorage.setItem('token', data.token);
       
       // Close the form and trigger success callback
       onClose();

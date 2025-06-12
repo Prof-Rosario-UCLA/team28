@@ -104,18 +104,12 @@ const OnboardingForm = ({ onComplete }: OnboardingFormProps) => {
       setStep(step + 1);
     } else {
       try {
-        // 1. get the auth token from localStorage to make sure user is logged in
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('No authentication token found');
-        }
-
-        // 2. send profile data to server by calling the update profile route
+        //send profile data to server by calling the update profile route
         const response = await fetch('/api/profile/update', {
           method: 'PUT',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
             profile: formData

@@ -15,16 +15,14 @@ dotenv.config();
 // DB 
 const { connectMongoDB, connectRedis, redis } = require('./config/database');
 
-// Route imports
-const matchRoutes = require('./routes/matches');
-const userRoutes = require('./routes/profile');
-const authRoutes = require('./routes/auth');
-const potentialRoutes = require('./routes/potential');
-const likeRoutes = require('./routes/like'); 
+
 
 const app = express();
 
+const cookieParser = require('cookie-parser');
+
 // Middleware
+app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     const allowed = [
@@ -45,6 +43,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Route imports
+const matchRoutes = require('./routes/matches');
+const userRoutes = require('./routes/profile');
+const authRoutes = require('./routes/auth');
+const potentialRoutes = require('./routes/potential');
+const likeRoutes = require('./routes/like'); 
 
 // Route mounting
 app.use('/api/matches', matchRoutes);

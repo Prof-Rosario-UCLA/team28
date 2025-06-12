@@ -13,6 +13,12 @@ router.post('/login', login);           // login endpoint (called by login form)
 router.get('/me', auth, getCurrentUser); // get current user endpoint (called by profile page)
 router.post('/logout', auth, async (req, res) => { // logout endpoint (called by navbar) 
   try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Lax',
+      path: '/',
+    });
     res.json({ message: 'Logged out successfully' });
   } catch (error) {
     console.error('Logout error:', error);
