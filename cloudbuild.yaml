@@ -35,8 +35,9 @@ steps:
     args:
       - '-c'
       - |
+        # Replace “us-west1-a” with your cluster’s actual zone if different
         gcloud container clusters get-credentials roomiematch \
-          --region us-west1
+          --zone us-west1-a
 
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
